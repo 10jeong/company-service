@@ -16,6 +16,15 @@ java {
 
 repositories {
     mavenCentral()
+
+    maven {
+        name = "GithubPackages"
+        url = uri("https://maven.pkg.github.com/10jeong/common-module")
+        credentials {
+            username = project.findProperty("githubUsername")
+            password = project.findProperty("githubToken")
+        }
+    }
 }
 
 ext {
@@ -23,11 +32,12 @@ ext {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'me.paulschwarz:spring-dotenv:4.0.0'
+
+    implementation 'com.yeoljeong:common-module:0.0.4-snapshot'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
