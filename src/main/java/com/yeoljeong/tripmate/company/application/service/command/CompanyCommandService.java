@@ -17,11 +17,10 @@ public class CompanyCommandService {
 
     validateDuplicateCompany(command.getBusinessNumber());
 
-    Company company = createCompanyEntity(command);
+    Company company = Company.create(command);
 
     return companyRepository.save(company);
   }
-
 
   //==메서드==
 
@@ -30,16 +29,5 @@ public class CompanyCommandService {
     if (companyRepository.existsByBusinessNumber(businessNumber)) {
       throw new IllegalArgumentException("이미 등록된 사업자입니다.");
     }
-  }
-
-  // Company 엔티티 생성
-  private Company createCompanyEntity(CreateCompanyCommand command) {
-    return Company.builder()
-        .name(command.getName())
-        .businessNumber(command.getBusinessNumber())
-        .description(command.getDescription())
-        .contactEmail(command.getEmail())
-        .contactPhone(command.getPhone())
-        .build();
   }
 }
