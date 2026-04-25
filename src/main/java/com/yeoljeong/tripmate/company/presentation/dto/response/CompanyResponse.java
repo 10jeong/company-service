@@ -1,9 +1,14 @@
 package com.yeoljeong.tripmate.company.presentation.dto.response;
 
-import com.yeoljeong.tripmate.company.domain.entity.Company;
+import com.yeoljeong.tripmate.company.application.result.CompanyResult;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.Builder;
+
+/**
+ * 클라이언트에 응답하기 위한 Response DTO
+ * (Controller → Client)
+ */
 
 @Builder
 public class CompanyResponse {
@@ -17,17 +22,15 @@ public class CompanyResponse {
   private String status;
   private LocalDateTime createdAt;
 
-  public static CompanyResponse from(Company company) {
+  public static CompanyResponse from(CompanyResult result) {
     return CompanyResponse.builder()
-        .id(company.getId())
-        .name(company.getName())
-        .businessNumber(company.getBusinessNumber())
-        .description(company.getDescription())
-        .email(company.getContactEmail())
-        .phone(company.getContactPhone())
-        .status(company.getStatus().name())
-        .createdAt(company.getCreatedAt())
+        .id(result.getId())
+        .name(result.getName())
+        .businessNumber(result.getBusinessNumber())
+        .description(result.getDescription())
+        .email(result.getEmail())
+        .phone(result.getPhone())
+        .status(result.getStatus())
         .build();
   }
-
 }

@@ -1,5 +1,6 @@
 package com.yeoljeong.tripmate.company.application.service.query;
 
+import com.yeoljeong.tripmate.company.application.result.CompanyResult;
 import com.yeoljeong.tripmate.company.domain.entity.Company;
 import com.yeoljeong.tripmate.company.domain.repository.CompanyRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +16,9 @@ public class CompanyQueryService {
 
   private final CompanyRepository companyRepository;
 
-  public Company getCompany(UUID companyId) {
-    return findCompany(companyId);
+  public CompanyResult getCompany(UUID companyId) {
+    Company company = findCompany(companyId);
+    return CompanyResult.from(company);
   }
 
   //==메서드==

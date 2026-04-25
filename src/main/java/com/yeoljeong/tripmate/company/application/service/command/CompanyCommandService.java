@@ -1,6 +1,7 @@
 package com.yeoljeong.tripmate.company.application.service.command;
 
 import com.yeoljeong.tripmate.company.application.command.CreateCompanyCommand;
+import com.yeoljeong.tripmate.company.application.result.CompanyResult;
 import com.yeoljeong.tripmate.company.domain.entity.Company;
 import com.yeoljeong.tripmate.company.domain.repository.CompanyRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,13 +14,15 @@ public class CompanyCommandService {
   private final CompanyRepository companyRepository;
 
   //업체 생성
-  public Company createCompany(CreateCompanyCommand command) {
+  public CompanyResult createCompany(CreateCompanyCommand command) {
 
     validateDuplicateCompany(command.getBusinessNumber());
 
     Company company = Company.create(command);
 
-    return companyRepository.save(company);
+    Company saved = companyRepository.save(company);
+
+    return CompanyResult.from(saved);
   }
 
   //==메서드==
