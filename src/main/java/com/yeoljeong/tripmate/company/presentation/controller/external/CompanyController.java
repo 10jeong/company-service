@@ -6,6 +6,7 @@ import com.yeoljeong.tripmate.company.application.service.query.CompanyQueryServ
 
 import com.yeoljeong.tripmate.company.presentation.dto.request.CreateCompanyRequest;
 import com.yeoljeong.tripmate.company.presentation.dto.response.CompanyResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class CompanyController {
 
   // 생성
   @PostMapping
-  public CompanyResponse createCompany(@RequestBody CreateCompanyRequest request) {
+  public CompanyResponse createCompany(@Valid @RequestBody CreateCompanyRequest request) {
 
     CompanyResult result = commandService.createCompany(request.toCommand());
 
