@@ -1,6 +1,5 @@
 package com.yeoljeong.tripmate.company.domain.entity;
 
-import com.yeoljeong.tripmate.company.application.command.CreateCompanyCommand;
 import com.yeoljeong.tripmate.company.domain.enums.CompanyStatus;
 import com.yeoljeong.tripmate.domain.BaseAuditEntity;
 import jakarta.persistence.*;
@@ -38,17 +37,22 @@ public class Company extends BaseAuditEntity {
   private CompanyStatus status;
 
 //생성 메서드
-  public static Company create(CreateCompanyCommand command) {
+public static Company create(
+    String name,
+    String businessNumber,
+    String description,
+    String email,
+    String phone
+) {
+  Company company = new Company();
 
-    Company company = new Company();
+  company.name = name;
+  company.businessNumber = businessNumber;
+  company.description = description;
+  company.contactEmail = email;
+  company.contactPhone = phone;
+  company.status = CompanyStatus.ACTIVE;
 
-    company.name = command.getName();
-    company.businessNumber = command.getBusinessNumber();
-    company.description = command.getDescription();
-    company.contactEmail = command.getEmail();
-    company.contactPhone = command.getPhone();
-    company.status = CompanyStatus.ACTIVE;
-
-    return company;
-  }
+  return company;
+}
 }

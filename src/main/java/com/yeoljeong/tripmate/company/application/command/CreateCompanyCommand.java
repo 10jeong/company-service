@@ -1,5 +1,6 @@
 package com.yeoljeong.tripmate.company.application.command;
 
+import com.yeoljeong.tripmate.company.domain.entity.Company;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -17,4 +18,14 @@ public class CreateCompanyCommand {
   private String description;
   private String email;
   private String phone;
+
+  public Company toEntity() {
+    return Company.create(
+        name,
+        businessNumber,
+        description,
+        email,
+        phone
+    );
+  }
 }

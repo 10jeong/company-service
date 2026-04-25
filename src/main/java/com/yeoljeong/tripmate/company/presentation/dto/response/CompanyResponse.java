@@ -4,12 +4,14 @@ import com.yeoljeong.tripmate.company.application.result.CompanyResult;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.Builder;
+import lombok.Getter;
 
 /**
  * 클라이언트에 응답하기 위한 Response DTO
  * (Controller → Client)
  */
 
+@Getter
 @Builder
 public class CompanyResponse {
 

@@ -18,7 +18,7 @@ public class CompanyCommandService {
 
     validateDuplicateCompany(command.getBusinessNumber());
 
-    Company company = Company.create(command);
+    Company company = command.toEntity();
 
     Company saved = companyRepository.save(company);
 
