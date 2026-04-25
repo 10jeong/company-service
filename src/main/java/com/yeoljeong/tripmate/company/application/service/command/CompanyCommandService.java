@@ -1,7 +1,11 @@
 package com.yeoljeong.tripmate.company.application.service.command;
 
+import com.yeoljeong.tripmate.company.application.command.CreateCompanyCommand;
+import com.yeoljeong.tripmate.company.application.result.CompanyResult;
 import com.yeoljeong.tripmate.company.domain.entity.Company;
+import com.yeoljeong.tripmate.company.domain.exception.CompanyErrorCode;
 import com.yeoljeong.tripmate.company.domain.repository.CompanyRepository;
+import com.yeoljeong.tripmate.exception.ApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,47 +16,23 @@ public class CompanyCommandService {
   private final CompanyRepository companyRepository;
 
   //업체 생성
-  public Company createCompany(
-      String name,
-      String businessNumber,
-      String description,
-      String email,
-      String phone
-  ) {
+  public CompanyResult createCompany(CreateCompanyCommand command) {
 
-    validateDuplicateCompany(businessNumber);
+    validateDuplicateCompany(command.getBusinessNumber());
 
-    Company company = createCompanyEntity(
-        name, businessNumber, description, email, phone
-    );
+    Company company = command.toEntity();
 
-    return companyRepository.save(company);
+    Company saved = companyRepository.save(company);
+
+    return CompanyResult.from(saved);
   }
-
 
   //==메서드==
 
   //사업자등록번호 중복 검증
   private void validateDuplicateCompany(String businessNumber) {
     if (companyRepository.existsByBusinessNumber(businessNumber)) {
-      throw new IllegalArgumentException("이미 등록된 사업자입니다.");
+      throw new ApiException(CompanyErrorCode.COMPANY_ALREADY_EXISTS);
     }
-  }
-
-  //Company 엔티티 생성
-  private Company createCompanyEntity(
-      String name,
-      String businessNumber,
-      String description,
-      String email,
-      String phone
-  ) {
-    return Company.builder()
-        .name(name)
-        .businessNumber(businessNumber)
-        .description(description)
-        .contactEmail(email)
-        .contactPhone(phone)
-        .build();
   }
 }

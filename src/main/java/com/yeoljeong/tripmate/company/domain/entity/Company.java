@@ -36,22 +36,23 @@ public class Company extends BaseAuditEntity {
   @Column(nullable = false)
   private CompanyStatus status;
 
-  @Builder
-  private Company(
-      UUID id,
-      String name,
-      String businessNumber,
-      String description,
-      String contactEmail,
-      String contactPhone,
-      CompanyStatus status
-  ) {
-    this.id = id;
-    this.name = name;
-    this.businessNumber = businessNumber;
-    this.description = description;
-    this.contactEmail = contactEmail;
-    this.contactPhone = contactPhone;
-    this.status = status != null ? status : CompanyStatus.ACTIVE;
-  }
+//생성 메서드
+public static Company create(
+    String name,
+    String businessNumber,
+    String description,
+    String email,
+    String phone
+) {
+  Company company = new Company();
+
+  company.name = name;
+  company.businessNumber = businessNumber;
+  company.description = description;
+  company.contactEmail = email;
+  company.contactPhone = phone;
+  company.status = CompanyStatus.ACTIVE;
+
+  return company;
+}
 }

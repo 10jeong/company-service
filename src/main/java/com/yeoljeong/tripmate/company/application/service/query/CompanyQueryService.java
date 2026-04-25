@@ -1,20 +1,24 @@
 package com.yeoljeong.tripmate.company.application.service.query;
 
+import com.yeoljeong.tripmate.company.application.result.CompanyResult;
 import com.yeoljeong.tripmate.company.domain.entity.Company;
 import com.yeoljeong.tripmate.company.domain.repository.CompanyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CompanyQueryService {
 
   private final CompanyRepository companyRepository;
 
-  public Company getCompany(UUID companyId) {
-    return findCompany(companyId);
+  public CompanyResult getCompany(UUID companyId) {
+    Company company = findCompany(companyId);
+    return CompanyResult.from(company);
   }
 
   //==메서드==
