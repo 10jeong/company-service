@@ -1,13 +1,14 @@
 @port = 8080
 @host = http://localhost:{{port}}
+@companyId = 04041064-ca5f-4569-9d6f-519731ccaff8
 
 ### 회사 생성
 POST {{host}}/companies
 Content-Type: application/json
 
 {
-  "name": "테스트 회사",
-  "businessNumber": "123-456",
+  "name": "테스트 회사2",
+  "businessNumber": "123-4567",
   "description": "설명",
   "email": "test@test.com",
   "phone": "010-1234-5678"
@@ -16,4 +17,4 @@ Content-Type: application/json
 ###
 
 ### 회사 조회
-GET {{host}}/companies/{companyId}
+GET {{host}}/companies/{{companyId}}
