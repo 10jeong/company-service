@@ -36,23 +36,35 @@ public class Company extends BaseAuditEntity {
   @Column(nullable = false)
   private CompanyStatus status;
 
-//생성 메서드
-public static Company create(
-    String name,
-    String businessNumber,
-    String description,
-    String email,
-    String phone
-) {
-  Company company = new Company();
+  @Builder(access = AccessLevel.PRIVATE)
+  private Company(
+      String name,
+      String businessNumber,
+      String description,
+      String contactEmail,
+      String contactPhone
+  ) {
+    this.name = name;
+    this.businessNumber = businessNumber;
+    this.description = description;
+    this.contactEmail = contactEmail;
+    this.contactPhone = contactPhone;
+    this.status = CompanyStatus.ACTIVE;
+  }
 
-  company.name = name;
-  company.businessNumber = businessNumber;
-  company.description = description;
-  company.contactEmail = email;
-  company.contactPhone = phone;
-  company.status = CompanyStatus.ACTIVE;
-
-  return company;
-}
+  public static Company create(
+      String name,
+      String businessNumber,
+      String description,
+      String email,
+      String phone
+  ) {
+    return Company.builder()
+        .name(name)
+        .businessNumber(businessNumber)
+        .description(description)
+        .contactEmail(email)
+        .contactPhone(phone)
+        .build();
+  }
 }
