@@ -1,4 +1,4 @@
-@port = 52474
+@port = 8080
 @host = http://localhost:{{port}}
 @companyId = 04041064-ca5f-4569-9d6f-519731ccaff8
 
