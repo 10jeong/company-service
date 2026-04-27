@@ -4,7 +4,6 @@ import com.yeoljeong.tripmate.product.application.command.CreateProductCommand;
 import com.yeoljeong.tripmate.product.application.result.ProductResult;
 import com.yeoljeong.tripmate.product.domain.entity.Product;
 import com.yeoljeong.tripmate.product.domain.repository.ProductRepository;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

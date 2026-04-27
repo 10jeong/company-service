@@ -1,7 +1,6 @@
 package com.yeoljeong.tripmate.product.domain.entity;
 
 import com.yeoljeong.tripmate.domain.BaseAuditEntity;
-import com.yeoljeong.tripmate.product.domain.enums.Country;
 import com.yeoljeong.tripmate.product.domain.enums.ProductStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
