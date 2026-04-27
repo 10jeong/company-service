@@ -60,7 +60,7 @@ public class Product extends BaseAuditEntity {
     this.companyId = companyId;
     this.productName = productName;
     this.description = description;
-    this.address = address;
+    this.address = validateAddress(address);
     this.price = validatePrice(price);
     this.status = ProductStatus.ACTIVE;
   }
@@ -79,6 +79,14 @@ public class Product extends BaseAuditEntity {
         .address(address)
         .price(price)
         .build();
+  }
+
+  //주소 검증 메서드
+  private static ProductAddress validateAddress(ProductAddress address) {
+    if (address == null) {
+      throw new BusinessException(ProductErrorCode.INVALID_PRODUCT_ADDRESS);
+    }
+    return address;
   }
 
   // 가격 검증 메서드
