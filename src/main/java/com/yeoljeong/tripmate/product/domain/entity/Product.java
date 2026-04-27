@@ -41,13 +41,13 @@ public class Product extends BaseAuditEntity {
   @Column(nullable = false)
   private Country country;
 
-  @Column(nullable = false, length = 255)
+  @Column(nullable = false)
   private String state;
 
-  @Column(nullable = false, length = 255)
+  @Column(nullable = false)
   private String city;
 
-  @Column(nullable = false, length = 255)
+  @Column(nullable = false)
   private String addressLine;
 
   @Column(nullable = false, precision = 10, scale = 2)
