@@ -3,7 +3,7 @@ package com.yeoljeong.tripmate.company.presentation.controller.external;
 import com.yeoljeong.tripmate.company.application.result.CompanyResult;
 import com.yeoljeong.tripmate.company.application.service.command.CompanyCommandService;
 import com.yeoljeong.tripmate.company.application.service.query.CompanyQueryService;
-import com.yeoljeong.tripmate.company.presentation.dto.request.CreateCompanyRequest;
+import com.yeoljeong.tripmate.company.presentation.dto.request.CompanyRequest;
 import com.yeoljeong.tripmate.company.presentation.dto.response.CompanyResponse;
 import com.yeoljeong.tripmate.response.ApiResponse;
 import com.yeoljeong.tripmate.response.constants.CommonSuccessCode;
@@ -24,7 +24,7 @@ public class CompanyController {
   // 생성
   @PostMapping
   public ApiResponse<CompanyResponse> createCompany(
-      @Valid @RequestBody CreateCompanyRequest request
+      @Valid @RequestBody CompanyRequest request
   ) {
     CompanyResult result = commandService.createCompany(request.toCommand());
     CompanyResponse response = CompanyResponse.from(result);
