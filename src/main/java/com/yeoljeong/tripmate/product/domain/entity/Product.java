@@ -1,9 +1,11 @@
 package com.yeoljeong.tripmate.product.domain.entity;
 
 import com.yeoljeong.tripmate.domain.BaseAuditEntity;
-import com.yeoljeong.tripmate.product.domain.enums.Country;
+import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.product.domain.enums.ProductStatus;
+import com.yeoljeong.tripmate.product.domain.exception.ProductErrorCode;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -37,18 +39,8 @@ public class Product extends BaseAuditEntity {
   @Column(nullable = false, columnDefinition = "TEXT")
   private String description;
 
-  @Enumerated(EnumType.STRING)
-  @Column(nullable = false)
-  private Country country;
-
-  @Column(nullable = false)
-  private String state;
-
-  @Column(nullable = false)
-  private String city;
-
-  @Column(nullable = false)
-  private String addressLine;
+  @Embedded
+  private ProductAddress address;
 
   @Column(nullable = false, precision = 10, scale = 2)
   private BigDecimal price;
@@ -62,20 +54,14 @@ public class Product extends BaseAuditEntity {
       UUID companyId,
       String productName,
       String description,
-      Country country,
-      String state,
-      String city,
-      String addressLine,
+      ProductAddress address,
       BigDecimal price
   ) {
     this.companyId = companyId;
     this.productName = productName;
     this.description = description;
-    this.country = country;
-    this.state = state;
-    this.city = city;
-    this.addressLine = addressLine;
-    this.price = price;
+    this.address = validateAddress(address);
+    this.price = validatePrice(price);
     this.status = ProductStatus.ACTIVE;
   }
 
@@ -83,22 +69,32 @@ public class Product extends BaseAuditEntity {
       UUID companyId,
       String productName,
       String description,
-      Country country,
-      String state,
-      String city,
-      String addressLine,
+      ProductAddress address,
       BigDecimal price
   ) {
     return Product.builder()
         .companyId(companyId)
         .productName(productName)
         .description(description)
-        .country(country)
-        .state(state)
-        .city(city)
-        .addressLine(addressLine)
+        .address(address)
         .price(price)
         .build();
+  }
+
+  //주소 검증 메서드
+  private static ProductAddress validateAddress(ProductAddress address) {
+    if (address == null) {
+      throw new BusinessException(ProductErrorCode.INVALID_PRODUCT_ADDRESS);
+    }
+    return address;
+  }
+
+  // 가격 검증 메서드
+  private static BigDecimal validatePrice(BigDecimal price) {
+    if (price == null || price.compareTo(BigDecimal.ZERO) <= 0) {
+      throw new BusinessException(ProductErrorCode.INVALID_PRODUCT_PRICE);
+    }
+    return price;
   }
 }
 

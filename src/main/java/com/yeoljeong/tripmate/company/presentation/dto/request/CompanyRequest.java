@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotBlank;
  * Company 생성 요청을 받는 Request DTO
  * (클라이언트 → Controller)
  */
-public record CreateCompanyRequest(
+public record CompanyRequest(
 
     @NotBlank(message = "회사명은 필수입니다.")
     String name,
