@@ -1,6 +1,7 @@
 package com.yeoljeong.tripmate.product.application.result;
 
 import com.yeoljeong.tripmate.product.domain.entity.Product;
+import com.yeoljeong.tripmate.product.domain.entity.ProductAddress;
 import com.yeoljeong.tripmate.product.domain.enums.Country;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -16,10 +17,7 @@ public record ProductResult(
     UUID companyId,
     String productName,
     String description,
-    Country country,
-    String state,
-    String city,
-    String addressLine,
+    ProductAddress address,
     BigDecimal price,
     String status
 ) {
@@ -30,10 +28,7 @@ public record ProductResult(
         product.getCompanyId(),
         product.getProductName(),
         product.getDescription(),
-        product.getCountry(),
-        product.getState(),
-        product.getCity(),
-        product.getAddressLine(),
+        product.getAddress(),
         product.getPrice(),
         product.getStatus().name()
     );

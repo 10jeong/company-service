@@ -1,6 +1,7 @@
 package com.yeoljeong.tripmate.product.application.command;
 
 import com.yeoljeong.tripmate.product.domain.entity.Product;
+import com.yeoljeong.tripmate.product.domain.entity.ProductAddress;
 import com.yeoljeong.tripmate.product.domain.enums.Country;
 
 import java.math.BigDecimal;
@@ -34,11 +35,17 @@ public class CreateProductCommand {
         companyId,
         productName,
         description,
+        toAddress(),
+        price
+    );
+  }
+
+  private ProductAddress toAddress() {
+    return new ProductAddress(
         country,
         state,
         city,
-        addressLine,
-        price
+        addressLine
     );
   }
 }
