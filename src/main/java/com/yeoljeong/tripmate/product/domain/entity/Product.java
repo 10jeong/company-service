@@ -1,7 +1,9 @@
 package com.yeoljeong.tripmate.product.domain.entity;
 
 import com.yeoljeong.tripmate.domain.BaseAuditEntity;
+import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.product.domain.enums.ProductStatus;
+import com.yeoljeong.tripmate.product.domain.exception.ProductErrorCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -59,7 +61,7 @@ public class Product extends BaseAuditEntity {
     this.productName = productName;
     this.description = description;
     this.address = address;
-    this.price = price;
+    this.price = validatePrice(price);
     this.status = ProductStatus.ACTIVE;
   }
 
@@ -77,6 +79,14 @@ public class Product extends BaseAuditEntity {
         .address(address)
         .price(price)
         .build();
+  }
+
+  // 가격 검증 메서드
+  private static BigDecimal validatePrice(BigDecimal price) {
+    if (price == null || price.compareTo(BigDecimal.ZERO) <= 0) {
+      throw new BusinessException(ProductErrorCode.INVALID_PRODUCT_PRICE);
+    }
+    return price;
   }
 }
 

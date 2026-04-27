@@ -2,6 +2,7 @@ package com.yeoljeong.tripmate.product.presentation.dto.request;
 
 import com.yeoljeong.tripmate.product.application.command.CreateProductCommand;
 import com.yeoljeong.tripmate.product.domain.enums.Country;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -35,6 +36,7 @@ public record ProductRequest(
     String addressLine,
 
     @NotNull(message = "가격은 필수입니다.")
+    @Digits(integer = 8, fraction = 2, message = "가격은 정수 8자리, 소수 2자리 이내여야 합니다.")
     @Positive(message = "가격은 0보다 커야 합니다.")
     BigDecimal price
 

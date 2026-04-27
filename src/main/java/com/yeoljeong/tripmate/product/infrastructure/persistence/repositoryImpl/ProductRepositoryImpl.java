@@ -28,6 +28,6 @@ public class ProductRepositoryImpl implements ProductRepository {
 
   @Override
   public Slice<Product> findAll(Pageable pageable) {
-    return jpaProductRepository.findAll(pageable);
+    return jpaProductRepository.findAllBy(pageable);
   }
 }
