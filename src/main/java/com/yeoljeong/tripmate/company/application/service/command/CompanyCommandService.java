@@ -5,7 +5,7 @@ import com.yeoljeong.tripmate.company.application.result.CompanyResult;
 import com.yeoljeong.tripmate.company.domain.entity.Company;
 import com.yeoljeong.tripmate.company.domain.exception.CompanyErrorCode;
 import com.yeoljeong.tripmate.company.domain.repository.CompanyRepository;
-import com.yeoljeong.tripmate.exception.ApiException;
+import com.yeoljeong.tripmate.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +32,7 @@ public class CompanyCommandService {
   //사업자등록번호 중복 검증
   private void validateDuplicateCompany(String businessNumber) {
     if (companyRepository.existsByBusinessNumber(businessNumber)) {
-      throw new ApiException(CompanyErrorCode.COMPANY_ALREADY_EXISTS);
+      throw new BusinessException(CompanyErrorCode.COMPANY_ALREADY_EXISTS);
     }
   }
 }
