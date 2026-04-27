@@ -1,4 +1,4 @@
-package com.yeoljeong.tripmate.product.infrastructur.persistence.jpa;
+package com.yeoljeong.tripmate.product.infrastructure.persistence.jpa;
 
 import com.yeoljeong.tripmate.product.domain.entity.Product;
 import java.util.UUID;
