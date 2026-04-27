@@ -4,7 +4,8 @@ import com.yeoljeong.tripmate.company.application.result.CompanyResult;
 import com.yeoljeong.tripmate.company.domain.entity.Company;
 import com.yeoljeong.tripmate.company.domain.exception.CompanyErrorCode;
 import com.yeoljeong.tripmate.company.domain.repository.CompanyRepository;
-import com.yeoljeong.tripmate.exception.ApiException;
+
+import com.yeoljeong.tripmate.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,6 @@ public class CompanyQueryService {
   // 업체 단건 조회
   private Company findCompany(UUID companyId) {
     return companyRepository.findById(companyId)
-        .orElseThrow(() -> new ApiException(CompanyErrorCode.COMPANY_NOT_FOUND));
+        .orElseThrow(() -> new BusinessException(CompanyErrorCode.COMPANY_NOT_FOUND));
   }
 }
