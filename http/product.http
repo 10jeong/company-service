@@ -1,0 +1,20 @@
+@port = 58501
+@host = http://localhost:{{port}}
+@companyId = 42946ebe-1963-4878-b621-704043703888
+@userId = 00000000-0000-0000-0000-000000000000
+
+### 상품 생성
+POST {{host}}/products
+Content-Type: application/json
+X-User-Id: {{userId}}
+X-Company-Id: {{companyId}}
+
+{
+  "productName": "테스트 상품",
+  "description": "테스트 상품 설명",
+  "country": "KR",
+  "state": "서울특별시",
+  "city": "강남구",
+  "addressLine": "테헤란로 123",
+  "price": 10000.00
+}
