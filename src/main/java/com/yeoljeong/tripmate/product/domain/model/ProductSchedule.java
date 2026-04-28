@@ -54,7 +54,7 @@ public class ProductSchedule {
       LocalDate date,
       int stock
   ) {
-    this.product = product;
+    this.product = validateProduct(product);
     this.date = validateDate(date);
     this.stock = validateStock(stock);
     this.status = ScheduleStatus.ACTIVE;
@@ -71,6 +71,14 @@ public class ProductSchedule {
         .date(date)
         .stock(stock)
         .build();
+  }
+
+  // ProductSchedule은 반드시 상품에 속해야 하므로 null을 허용하지 않음
+  private static Product validateProduct(Product product) {
+    if (product == null) {
+      throw new IllegalArgumentException("상품은 필수입니다.");
+    }
+    return product;
   }
 
   // 날짜 유효성 검증 (필수 값 체크)
@@ -92,11 +100,15 @@ public class ProductSchedule {
 
   // 재고 차감 (수량 검증 포함)
   public void decreaseStock(int quantity) {
-    //1. 재고가 주문 수량 보다 적으면 예외
+    //예외1:차감 수량은 1 이상이어야 함 (0 또는 음수 입력 방지)
+    if (quantity <= 0) {
+      throw new IllegalArgumentException("차감 수량은 1 이상이어야 합니다.");
+    }
+    //예외2:재고가 주문 수량 보다 적으면 예외
     if (this.stock < quantity) {
       throw new IllegalArgumentException("재고가 부족합니다.");
     }
-    // 2. 재고 차감
+    //  재고 차감
     this.stock -= quantity;
   }
 
