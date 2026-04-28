@@ -1,7 +1,7 @@
 package com.yeoljeong.tripmate.product.presentation.controller.external;
 
-import com.yeoljeong.tripmate.product.application.command.CreateProductCommand;
-import com.yeoljeong.tripmate.product.application.result.ProductResult;
+import com.yeoljeong.tripmate.product.application.dto.command.CreateProductCommand;
+import com.yeoljeong.tripmate.product.application.dto.result.ProductResult;
 import com.yeoljeong.tripmate.product.application.service.command.ProductCommandService;
 import com.yeoljeong.tripmate.product.presentation.dto.request.ProductRequest;
 import com.yeoljeong.tripmate.product.presentation.dto.response.ProductResponse;
@@ -10,7 +10,6 @@ import com.yeoljeong.tripmate.response.constants.CommonSuccessCode;
 import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

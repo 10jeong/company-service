@@ -1,7 +1,7 @@
 package com.yeoljeong.tripmate.product.application.service.query;
 
 import com.yeoljeong.tripmate.exception.BusinessException;
-import com.yeoljeong.tripmate.product.application.result.ProductResult;
+import com.yeoljeong.tripmate.product.application.dto.result.ProductResult;
 import com.yeoljeong.tripmate.product.domain.entity.Product;
 import com.yeoljeong.tripmate.product.domain.exception.ProductErrorCode;
 import com.yeoljeong.tripmate.product.domain.repository.ProductRepository;

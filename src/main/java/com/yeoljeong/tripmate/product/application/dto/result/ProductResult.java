@@ -1,4 +1,4 @@
-package com.yeoljeong.tripmate.product.application.result;
+package com.yeoljeong.tripmate.product.application.dto.result;
 
 import com.yeoljeong.tripmate.product.domain.entity.Product;
 import com.yeoljeong.tripmate.product.domain.entity.ProductAddress;

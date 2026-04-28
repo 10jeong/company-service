@@ -1,6 +1,6 @@
 package com.yeoljeong.tripmate.company.presentation.dto.response;
 
-import com.yeoljeong.tripmate.company.application.result.CompanyResult;
+import com.yeoljeong.tripmate.company.application.dto.result.CompanyResult;
 import java.time.LocalDateTime;
 import java.util.UUID;
 

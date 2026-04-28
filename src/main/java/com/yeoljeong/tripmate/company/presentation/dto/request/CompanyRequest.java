@@ -1,6 +1,6 @@
 package com.yeoljeong.tripmate.company.presentation.dto.request;
 
-import com.yeoljeong.tripmate.company.application.command.CreateCompanyCommand;
+import com.yeoljeong.tripmate.company.application.dto.command.CreateCompanyCommand;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 

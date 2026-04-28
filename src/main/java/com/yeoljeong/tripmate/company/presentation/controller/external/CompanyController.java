@@ -1,6 +1,6 @@
 package com.yeoljeong.tripmate.company.presentation.controller.external;
 
-import com.yeoljeong.tripmate.company.application.result.CompanyResult;
+import com.yeoljeong.tripmate.company.application.dto.result.CompanyResult;
 import com.yeoljeong.tripmate.company.application.service.command.CompanyCommandService;
 import com.yeoljeong.tripmate.company.application.service.query.CompanyQueryService;
 import com.yeoljeong.tripmate.company.presentation.dto.request.CompanyRequest;
