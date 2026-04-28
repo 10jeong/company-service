@@ -1,4 +1,4 @@
-package com.yeoljeong.tripmate.product.domain.entity;
+package com.yeoljeong.tripmate.product.domain.model;
 
 import com.yeoljeong.tripmate.domain.BaseAuditEntity;
 import com.yeoljeong.tripmate.exception.BusinessException;

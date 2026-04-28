@@ -1,7 +1,7 @@
 package com.yeoljeong.tripmate.product.application.dto.command;
 
-import com.yeoljeong.tripmate.product.domain.entity.Product;
-import com.yeoljeong.tripmate.product.domain.entity.ProductAddress;
+import com.yeoljeong.tripmate.product.domain.model.Product;
+import com.yeoljeong.tripmate.product.domain.model.ProductAddress;
 import com.yeoljeong.tripmate.product.domain.enums.Country;
 
 import java.math.BigDecimal;

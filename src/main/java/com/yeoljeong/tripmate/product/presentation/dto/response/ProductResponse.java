@@ -1,7 +1,7 @@
 package com.yeoljeong.tripmate.product.presentation.dto.response;
 
 import com.yeoljeong.tripmate.product.application.dto.result.ProductResult;
-import com.yeoljeong.tripmate.product.domain.entity.ProductAddress;
+import com.yeoljeong.tripmate.product.domain.model.ProductAddress;
 import java.math.BigDecimal;
 import java.util.UUID;
 

@@ -1,6 +1,6 @@
 package com.yeoljeong.tripmate.company.infrastructure.persistence.repositoryImpl;
 
-import com.yeoljeong.tripmate.company.domain.entity.Company;
+import com.yeoljeong.tripmate.company.domain.model.Company;
 import com.yeoljeong.tripmate.company.domain.repository.CompanyRepository;
 import com.yeoljeong.tripmate.company.infrastructure.persistence.jpa.CompanyJpaRepository;
 import lombok.RequiredArgsConstructor;

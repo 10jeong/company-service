@@ -1,8 +1,8 @@
-@port = 58501
+@port = 50599
 @host = http://localhost:{{port}}
-@companyId = 42946ebe-1963-4878-b621-704043703888
+@companyId = 278a96ab-0527-492e-9e96-b4bd0235ddb8
 @userId = 00000000-0000-0000-0000-000000000000
-
+@productId = fd20fbb6-59d9-4651-bcbb-aa7fad3f2706
 ### 상품 생성
 POST {{host}}/products
 Content-Type: application/json
@@ -10,7 +10,7 @@ X-User-Id: {{userId}}
 X-Company-Id: {{companyId}}
 
 {
-  "productName": "테스트 상품",
+  "productName": "테스트 상품2",
   "description": "테스트 상품 설명",
   "country": "KR",
   "state": "서울특별시",
@@ -18,3 +18,11 @@ X-Company-Id: {{companyId}}
   "addressLine": "테헤란로 123",
   "price": 10000.00
 }
+
+### 상품 단건 조회
+GET {{host}}/products/{{productId}}
+
+###
+
+### 상품 목록 조회
+GET {{host}}/products?page=0&size=10&sort=createdAt,desc
