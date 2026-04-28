@@ -3,6 +3,7 @@ package com.yeoljeong.tripmate.product.presentation.controller.external;
 import com.yeoljeong.tripmate.product.application.dto.command.CreateProductCommand;
 import com.yeoljeong.tripmate.product.application.dto.result.ProductResult;
 import com.yeoljeong.tripmate.product.application.service.command.ProductCommandService;
+import com.yeoljeong.tripmate.product.application.service.query.ProductQueryService;
 import com.yeoljeong.tripmate.product.presentation.dto.request.ProductRequest;
 import com.yeoljeong.tripmate.product.presentation.dto.response.ProductResponse;
 import com.yeoljeong.tripmate.response.ApiResponse;
@@ -10,6 +11,8 @@ import com.yeoljeong.tripmate.response.constants.CommonSuccessCode;
 import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
 
   private final ProductCommandService productCommandService;
+  private final ProductQueryService productQueryService;
 
   // 상품 생성
   //1. 지금 → @RequestHeader로 임시 처리
@@ -34,5 +38,26 @@ public class ProductController {
     ProductResult result = productCommandService.createProduct(command);
     ProductResponse response = ProductResponse.from(result);
     return ApiResponse.success(CommonSuccessCode.CREATE, response);
+  }
+
+  // 상품 단건 조회
+  @GetMapping("/{productId}")
+  public ApiResponse<ProductResponse> getProduct(
+      @PathVariable UUID productId
+  ) {
+    ProductResult result = productQueryService.getProduct(productId);
+    ProductResponse response = ProductResponse.from(result);
+    return ApiResponse.success(CommonSuccessCode.OK, response);
+  }
+
+  // 상품 목록 조회
+  @GetMapping
+  public ApiResponse<Slice<ProductResponse>> getProducts(
+      Pageable pageable
+  ) {
+    Slice<ProductResponse> response = productQueryService.getProducts(pageable)
+        .map(ProductResponse::from);
+
+    return ApiResponse.success(CommonSuccessCode.OK, response);
   }
 }
