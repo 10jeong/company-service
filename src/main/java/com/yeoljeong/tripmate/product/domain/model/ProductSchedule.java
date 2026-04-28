@@ -5,9 +5,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDate;
@@ -31,8 +34,9 @@ public class ProductSchedule {
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
 
-  @Column(name = "product_id", nullable = false)
-  private UUID productId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "product_id", nullable = false)
+  private Product product;
 
   @Column(nullable = false)
   private LocalDate date;
@@ -46,23 +50,24 @@ public class ProductSchedule {
 
   @Builder(access = AccessLevel.PRIVATE)
   private ProductSchedule(
-      UUID productId,
+      Product product,
       LocalDate date,
       int stock
   ) {
-    this.productId = productId;
+    this.product = product;
     this.date = validateDate(date);
     this.stock = validateStock(stock);
     this.status = ScheduleStatus.ACTIVE;
   }
 
+  //상품이랑 동시에 생성 되는게 아니라 따로도 만드니까 public
   public static ProductSchedule create(
-      UUID productId,
+      Product product,
       LocalDate date,
       int stock
   ) {
     return ProductSchedule.builder()
-        .productId(productId)
+        .product(product)
         .date(date)
         .stock(stock)
         .build();
