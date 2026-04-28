@@ -5,6 +5,7 @@ import com.yeoljeong.tripmate.product.domain.enums.Country;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
@@ -21,6 +22,7 @@ public record ProductRequest(
     String description,
 
     @NotNull(message = "국가는 필수입니다.")
+    @Pattern(regexp = "^(KR|JP)$", message = "유효하지 않은 국가 코드입니다.")
     Country country,
 
     @NotBlank(message = "도/주는 필수입니다.")
