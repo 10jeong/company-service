@@ -6,6 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface JpaProductRepository extends JpaRepository<Product, UUID> {
+public interface ProductJpaRepository extends JpaRepository<Product, UUID> {
   Slice<Product> findAllBy(Pageable pageable);
 }

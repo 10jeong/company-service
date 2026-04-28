@@ -1,4 +1,4 @@
-package com.yeoljeong.tripmate.company.application.result;
+package com.yeoljeong.tripmate.company.application.dto.result;
 
 import com.yeoljeong.tripmate.company.domain.entity.Company;
 import java.time.LocalDateTime;

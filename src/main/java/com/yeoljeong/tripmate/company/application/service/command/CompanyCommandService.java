@@ -1,7 +1,7 @@
 package com.yeoljeong.tripmate.company.application.service.command;
 
-import com.yeoljeong.tripmate.company.application.command.CreateCompanyCommand;
-import com.yeoljeong.tripmate.company.application.result.CompanyResult;
+import com.yeoljeong.tripmate.company.application.dto.command.CreateCompanyCommand;
+import com.yeoljeong.tripmate.company.application.dto.result.CompanyResult;
 import com.yeoljeong.tripmate.company.domain.entity.Company;
 import com.yeoljeong.tripmate.company.domain.exception.CompanyErrorCode;
 import com.yeoljeong.tripmate.company.domain.repository.CompanyRepository;

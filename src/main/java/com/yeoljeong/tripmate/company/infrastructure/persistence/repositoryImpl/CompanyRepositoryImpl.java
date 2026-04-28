@@ -2,7 +2,7 @@ package com.yeoljeong.tripmate.company.infrastructure.persistence.repositoryImpl
 
 import com.yeoljeong.tripmate.company.domain.entity.Company;
 import com.yeoljeong.tripmate.company.domain.repository.CompanyRepository;
-import com.yeoljeong.tripmate.company.infrastructure.persistence.jpa.JpaCompanyRepository;
+import com.yeoljeong.tripmate.company.infrastructure.persistence.jpa.CompanyJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +13,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CompanyRepositoryImpl implements CompanyRepository {
 
-  private final JpaCompanyRepository jpaRepository;
+  private final CompanyJpaRepository jpaRepository;
 
   @Override
   public Company save(Company company) {

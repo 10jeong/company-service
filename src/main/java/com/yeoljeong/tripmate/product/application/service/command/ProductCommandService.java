@@ -1,7 +1,7 @@
 package com.yeoljeong.tripmate.product.application.service.command;
 
-import com.yeoljeong.tripmate.product.application.command.CreateProductCommand;
-import com.yeoljeong.tripmate.product.application.result.ProductResult;
+import com.yeoljeong.tripmate.product.application.dto.command.CreateProductCommand;
+import com.yeoljeong.tripmate.product.application.dto.result.ProductResult;
 import com.yeoljeong.tripmate.product.domain.entity.Product;
 import com.yeoljeong.tripmate.product.domain.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;

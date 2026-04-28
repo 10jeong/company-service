@@ -1,6 +1,6 @@
 package com.yeoljeong.tripmate.product.presentation.dto.request;
 
-import com.yeoljeong.tripmate.product.application.command.CreateProductCommand;
+import com.yeoljeong.tripmate.product.application.dto.command.CreateProductCommand;
 import com.yeoljeong.tripmate.product.domain.enums.Country;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;

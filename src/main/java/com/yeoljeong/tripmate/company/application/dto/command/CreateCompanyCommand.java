@@ -1,4 +1,4 @@
-package com.yeoljeong.tripmate.company.application.command;
+package com.yeoljeong.tripmate.company.application.dto.command;
 
 import com.yeoljeong.tripmate.company.domain.entity.Company;
 import lombok.AllArgsConstructor;

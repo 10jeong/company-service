@@ -1,6 +1,6 @@
 package com.yeoljeong.tripmate.company.application.service.query;
 
-import com.yeoljeong.tripmate.company.application.result.CompanyResult;
+import com.yeoljeong.tripmate.company.application.dto.result.CompanyResult;
 import com.yeoljeong.tripmate.company.domain.entity.Company;
 import com.yeoljeong.tripmate.company.domain.exception.CompanyErrorCode;
 import com.yeoljeong.tripmate.company.domain.repository.CompanyRepository;
