@@ -1,6 +1,6 @@
 package com.yeoljeong.tripmate.company.application.dto.command;
 
-import com.yeoljeong.tripmate.company.domain.entity.Company;
+import com.yeoljeong.tripmate.company.domain.model.Company;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

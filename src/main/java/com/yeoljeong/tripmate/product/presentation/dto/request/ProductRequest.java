@@ -23,7 +23,7 @@ public record ProductRequest(
 
     @NotNull(message = "국가는 필수입니다.")
     @Pattern(regexp = "^(KR|JP)$", message = "유효하지 않은 국가 코드입니다.")
-    Country country,
+    String country,
 
     @NotBlank(message = "도/주는 필수입니다.")
     @Size(max = 100, message = "도/주는 100자 이내여야 합니다.")
@@ -50,7 +50,7 @@ public record ProductRequest(
         .companyId(companyId)
         .productName(productName)
         .description(description)
-        .country(country)
+        .country(Country.valueOf(country))
         .state(state)
         .city(city)
         .addressLine(addressLine)

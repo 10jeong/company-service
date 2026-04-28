@@ -1,6 +1,6 @@
 package com.yeoljeong.tripmate.product.domain.repository;
 
-import com.yeoljeong.tripmate.product.domain.entity.Product;
+import com.yeoljeong.tripmate.product.domain.model.Product;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.domain.Pageable;

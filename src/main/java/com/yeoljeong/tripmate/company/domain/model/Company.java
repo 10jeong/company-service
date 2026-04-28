@@ -1,4 +1,4 @@
-package com.yeoljeong.tripmate.company.domain.entity;
+package com.yeoljeong.tripmate.company.domain.model;
 
 import com.yeoljeong.tripmate.company.domain.enums.CompanyStatus;
 import com.yeoljeong.tripmate.domain.BaseAuditEntity;

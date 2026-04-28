@@ -1,6 +1,6 @@
 package com.yeoljeong.tripmate.company.application.dto.result;
 
-import com.yeoljeong.tripmate.company.domain.entity.Company;
+import com.yeoljeong.tripmate.company.domain.model.Company;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;

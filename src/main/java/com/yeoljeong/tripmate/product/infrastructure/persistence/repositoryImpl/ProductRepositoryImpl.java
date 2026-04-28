@@ -1,6 +1,6 @@
 package com.yeoljeong.tripmate.product.infrastructure.persistence.repositoryImpl;
 
-import com.yeoljeong.tripmate.product.domain.entity.Product;
+import com.yeoljeong.tripmate.product.domain.model.Product;
 import com.yeoljeong.tripmate.product.domain.repository.ProductRepository;
 import com.yeoljeong.tripmate.product.infrastructure.persistence.jpa.ProductJpaRepository;
 import java.util.Optional;
