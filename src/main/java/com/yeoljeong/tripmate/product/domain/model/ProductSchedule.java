@@ -1,6 +1,8 @@
 package com.yeoljeong.tripmate.product.domain.model;
 
+import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.product.domain.enums.ScheduleStatus;
+import com.yeoljeong.tripmate.product.domain.exception.ProductErrorCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -76,7 +78,7 @@ public class ProductSchedule {
   // ProductSchedule은 반드시 상품에 속해야 하므로 null을 허용하지 않음
   private static Product validateProduct(Product product) {
     if (product == null) {
-      throw new IllegalArgumentException("상품은 필수입니다.");
+      throw new BusinessException(ProductErrorCode.INVALID_PRODUCT);
     }
     return product;
   }
@@ -84,7 +86,7 @@ public class ProductSchedule {
   // 날짜 유효성 검증 (필수 값 체크)
   private static LocalDate validateDate(LocalDate date) {
     if (date == null) {
-      throw new IllegalArgumentException("날짜는 필수입니다.");
+      throw new BusinessException(ProductErrorCode.INVALID_DATE);
     }
     return date;
   }
@@ -92,30 +94,32 @@ public class ProductSchedule {
   // 재고 유효성 검증 (1 이상)
   private static int validateStock(int stock) {
     if (stock <= 0) {
-      throw new IllegalArgumentException("재고는 1 이상이어야 합니다.");
+      throw new BusinessException(ProductErrorCode.INVALID_STOCK);
     }
     return stock;
   }
 
-
-  // 재고 차감 (수량 검증 포함)
+  // 재고 차감 (유효성 검증 포함)
   public void decreaseStock(int quantity) {
-    //예외1:차감 수량은 1 이상이어야 함 (0 또는 음수 입력 방지)
+
+    // 차감 수량은 1 이상이어야 함 (0 또는 음수 입력 방지)
     if (quantity <= 0) {
-      throw new IllegalArgumentException("차감 수량은 1 이상이어야 합니다.");
+      throw new BusinessException(ProductErrorCode.INVALID_QUANTITY);
     }
-    //예외2:재고가 주문 수량 보다 적으면 예외
+
+    // 재고 부족 시 예외 발생
     if (this.stock < quantity) {
-      throw new IllegalArgumentException("재고가 부족합니다.");
+      throw new BusinessException(ProductErrorCode.INSUFFICIENT_STOCK);
     }
-    //  재고 차감
+
+    // 재고 차감
     this.stock -= quantity;
   }
 
   // 일정 상태를 CLOSED로 변경 (판매 종료)
   public void close() {
     if (this.status == ScheduleStatus.CLOSED) {
-      throw new IllegalStateException("이미 종료된 일정입니다.");
+      throw new BusinessException(ProductErrorCode.ALREADY_CLOSED);
     }
     this.status = ScheduleStatus.CLOSED;
   }
