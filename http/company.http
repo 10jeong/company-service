@@ -1,4 +1,4 @@
-@port = 8080
+@port = 49866
 @host = http://localhost:{{port}}
 @companyId = 04041064-ca5f-4569-9d6f-519731ccaff8
 
@@ -7,8 +7,8 @@ POST {{host}}/companies
 Content-Type: application/json
 
 {
-  "name": "테스트 회사3",
-  "businessNumber": "123-45678",
+  "name": "테스트 회사1",
+  "businessNumber": "123-456",
   "description": "설명",
   "email": "test@test.com",
   "phone": "010-1234-5678"
