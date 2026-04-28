@@ -68,8 +68,7 @@ public class ProductSchedule {
         .build();
   }
 
-  // ===== 검증 =====
-
+  // 날짜 유효성 검증 (필수 값 체크)
   private static LocalDate validateDate(LocalDate date) {
     if (date == null) {
       throw new IllegalArgumentException("날짜는 필수입니다.");
@@ -77,6 +76,7 @@ public class ProductSchedule {
     return date;
   }
 
+  // 재고 유효성 검증 (1 이상)
   private static int validateStock(int stock) {
     if (stock <= 0) {
       throw new IllegalArgumentException("재고는 1 이상이어야 합니다.");
@@ -84,8 +84,8 @@ public class ProductSchedule {
     return stock;
   }
 
-  // ===== 비즈니스 로직 =====
 
+  // 재고 차감 (수량 검증 포함)
   public void decreaseStock(int quantity) {
     if (this.stock < quantity) {
       throw new IllegalArgumentException("재고가 부족합니다.");
@@ -93,6 +93,7 @@ public class ProductSchedule {
     this.stock -= quantity;
   }
 
+  // 일정 상태를 CLOSED로 변경 (판매 종료)
   public void close() {
     this.status = ScheduleStatus.CLOSED;
   }
