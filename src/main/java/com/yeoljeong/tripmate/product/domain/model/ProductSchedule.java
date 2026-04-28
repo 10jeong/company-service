@@ -92,14 +92,20 @@ public class ProductSchedule {
 
   // 재고 차감 (수량 검증 포함)
   public void decreaseStock(int quantity) {
+    //1. 재고가 주문 수량 보다 적으면 예외
     if (this.stock < quantity) {
       throw new IllegalArgumentException("재고가 부족합니다.");
     }
+    // 2. 재고 차감
     this.stock -= quantity;
   }
 
   // 일정 상태를 CLOSED로 변경 (판매 종료)
   public void close() {
+    if (this.status == ScheduleStatus.CLOSED) {
+      throw new IllegalStateException("이미 종료된 일정입니다.");
+    }
     this.status = ScheduleStatus.CLOSED;
   }
+
 }
