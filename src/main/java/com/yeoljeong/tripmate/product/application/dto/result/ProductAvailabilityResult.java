@@ -8,10 +8,11 @@ import java.util.UUID;
 /**
  * 날짜 기반 예약 가능 상품 조회 결과 DTO 겸
  * 싱품 에게 넘겨 주는 Product  + Product Schedule 정보 DTO
+ * 즉 ProductAvailabilityResult dto
  * (Service → Controller)
  */
 
-public record ProductSearchResult(
+public record ProductAvailabilityResult(
     //Product 정보
     UUID productId,
     String productName,
@@ -27,8 +28,8 @@ public record ProductSearchResult(
     String status
 ) {
 
-  public static ProductSearchResult from(ProductSchedule schedule) {
-    return new ProductSearchResult(
+  public static ProductAvailabilityResult from(ProductSchedule schedule) {
+    return new ProductAvailabilityResult(
         schedule.getProduct().getId(),
         schedule.getProduct().getProductName(),
         schedule.getProduct().getAddress().getCountry().name(),

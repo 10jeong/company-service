@@ -3,6 +3,7 @@ package com.yeoljeong.tripmate.product.infrastructure.persistence.repositoryImpl
 import com.yeoljeong.tripmate.product.domain.model.ProductSchedule;
 import com.yeoljeong.tripmate.product.domain.repository.ProductScheduleRepository;
 import com.yeoljeong.tripmate.product.infrastructure.persistence.jpa.ProductScheduleJpaRepository;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -51,6 +52,9 @@ public class ProductScheduleRepositoryImpl implements ProductScheduleRepository 
   public Optional<ProductSchedule> findByIdAndProductId(UUID id, UUID productId) {
     return jpaRepository.findByIdAndProductId(id, productId);
   }
-
+  @Override
+  public List<ProductSchedule> findAvailableSchedulesByDate(LocalDate date) {
+    return jpaRepository.findAvailableSchedulesByDate(date);
+  }
 
 }
