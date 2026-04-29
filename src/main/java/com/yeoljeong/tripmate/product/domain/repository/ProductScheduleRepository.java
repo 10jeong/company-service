@@ -19,4 +19,8 @@ public interface ProductScheduleRepository {
 
   void flush();
 
+  Slice<ProductSchedule> findAllByProductId(UUID productId, Pageable pageable);
+
+  Optional<ProductSchedule> findByIdAndProductId(UUID id, UUID productId);
+
 }
