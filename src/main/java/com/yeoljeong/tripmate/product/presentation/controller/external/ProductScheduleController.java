@@ -14,6 +14,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -66,7 +67,7 @@ public class ProductScheduleController {
   @GetMapping("/{productId}/schedules")
   public ApiResponse<Slice<ProductScheduleQueryResponse>> getSchedules(
       @PathVariable UUID productId,
-      Pageable pageable
+      @PageableDefault(size = 10) Pageable pageable
   ) {
     Slice<ProductScheduleQueryResponse> response =
         scheduleQueryService.getSchedules(productId, pageable)

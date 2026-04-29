@@ -13,6 +13,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -53,7 +54,7 @@ public class ProductController {
   // 상품 목록 조회
   @GetMapping
   public ApiResponse<Slice<ProductResponse>> getProducts(
-      Pageable pageable
+      @PageableDefault(size = 10) Pageable pageable
   ) {
     Slice<ProductResponse> response = productQueryService.getProducts(pageable)
         .map(ProductResponse::from);
