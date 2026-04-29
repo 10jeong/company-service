@@ -25,7 +25,7 @@ public class ProductScheduleQueryService {
     return ProductScheduleQueryResult.from(schedule);
   }
 
-  // 목록 조회
+  // 목록  조회
   public Slice<ProductScheduleQueryResult> getSchedules(Pageable pageable) {
     return scheduleRepository.findAll(pageable)
         .map(ProductScheduleQueryResult::from);
