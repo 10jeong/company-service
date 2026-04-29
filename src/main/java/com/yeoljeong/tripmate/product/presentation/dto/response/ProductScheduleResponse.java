@@ -1,6 +1,6 @@
 package com.yeoljeong.tripmate.product.presentation.dto.response;
 
-import com.yeoljeong.tripmate.product.application.dto.result.ProductScheduleResult;
+import com.yeoljeong.tripmate.product.application.dto.result.ProductScheduleCommandResult;
 import java.time.LocalDate;
 import java.util.UUID;
 import lombok.Getter;
@@ -26,7 +26,7 @@ public class ProductScheduleResponse {
   }
 
   //Result → Response 변환
-  public static ProductScheduleResponse from(ProductScheduleResult result) {
+  public static ProductScheduleResponse from(ProductScheduleCommandResult result) {
     return new ProductScheduleResponse(
         result.productId(),
         result.createdCount(),

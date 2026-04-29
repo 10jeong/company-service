@@ -4,6 +4,8 @@ import com.yeoljeong.tripmate.product.domain.model.ProductSchedule;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 public interface ProductScheduleRepository {
 
@@ -12,6 +14,8 @@ public interface ProductScheduleRepository {
   List<ProductSchedule> saveAll(List<ProductSchedule> schedules);
 
   Optional<ProductSchedule> findById(UUID id);
+
+  Slice<ProductSchedule> findAll(Pageable pageable);
 
   void flush();
 

@@ -22,7 +22,10 @@ public enum ProductErrorCode implements ErrorCode {
   INSUFFICIENT_STOCK(HttpStatus.CONFLICT, "재고가 부족합니다."),
 
   // 스케줄 - 상태
-  ALREADY_CLOSED(HttpStatus.CONFLICT, "이미 종료된 일정입니다.");
+  ALREADY_CLOSED(HttpStatus.CONFLICT, "이미 종료된 일정입니다."),
+
+  // 스케줄 - 조회
+  SCHEDULE_NOT_FOUND(HttpStatus.NOT_FOUND, "스케줄을 찾을 수 없습니다.");
 
 
   private final HttpStatus status;
