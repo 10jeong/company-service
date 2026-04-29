@@ -1,7 +1,6 @@
 package com.yeoljeong.tripmate.product.application.service.query;
 
 import com.yeoljeong.tripmate.exception.BusinessException;
-import com.yeoljeong.tripmate.product.application.dto.result.ProductScheduleCommandResult;
 import com.yeoljeong.tripmate.product.application.dto.result.ProductScheduleQueryResult;
 import com.yeoljeong.tripmate.product.domain.exception.ProductErrorCode;
 import com.yeoljeong.tripmate.product.domain.model.ProductSchedule;
