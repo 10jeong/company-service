@@ -41,4 +41,16 @@ public class ProductScheduleRepositoryImpl implements ProductScheduleRepository 
   public Slice<ProductSchedule> findAll(Pageable pageable) {
     return jpaRepository.findAllBy(pageable);
   }
+
+  @Override
+  public Slice<ProductSchedule> findAllByProductId(UUID productId, Pageable pageable) {
+    return jpaRepository.findAllByProductId(productId, pageable);
+  }
+
+  @Override
+  public Optional<ProductSchedule> findByIdAndProductId(UUID id, UUID productId) {
+    return jpaRepository.findByIdAndProductId(id, productId);
+  }
+
+
 }

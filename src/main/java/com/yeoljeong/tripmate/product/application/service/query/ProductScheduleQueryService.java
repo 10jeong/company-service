@@ -18,16 +18,16 @@ public class ProductScheduleQueryService {
   private final ProductScheduleRepository scheduleRepository;
 
   // 단건 조회
-  public ProductScheduleQueryResult getSchedule(UUID scheduleId) {
-    ProductSchedule schedule = scheduleRepository.findById(scheduleId)
+  public ProductScheduleQueryResult getSchedule(UUID productId, UUID scheduleId) {
+    ProductSchedule schedule = scheduleRepository.findByIdAndProductId(scheduleId, productId)
         .orElseThrow(() -> new BusinessException(ProductErrorCode.SCHEDULE_NOT_FOUND));
 
     return ProductScheduleQueryResult.from(schedule);
   }
 
-  // 목록  조회
-  public Slice<ProductScheduleQueryResult> getSchedules(Pageable pageable) {
-    return scheduleRepository.findAll(pageable)
+  // 목록 조회
+  public Slice<ProductScheduleQueryResult> getSchedules(UUID productId, Pageable pageable) {
+    return scheduleRepository.findAllByProductId(productId, pageable)
         .map(ProductScheduleQueryResult::from);
   }
 }
