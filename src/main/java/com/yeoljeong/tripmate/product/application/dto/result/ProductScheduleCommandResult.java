@@ -7,18 +7,18 @@ import java.util.UUID;
  * 상품 스케줄 생성 결과 DTO
  * (Service → Controller)
  */
-public record ProductScheduleResult(
+public record ProductScheduleCommandResult(
     UUID productId,
     int createdCount,
     LocalDate startDate,
     LocalDate endDate
 ) {
-  public static ProductScheduleResult of(
+  public static ProductScheduleCommandResult of(
       UUID productId,
       int count,
       LocalDate startDate,
       LocalDate endDate
   ) {
-    return new ProductScheduleResult(productId, count, startDate, endDate);
+    return new ProductScheduleCommandResult(productId, count, startDate, endDate);
   }
 }

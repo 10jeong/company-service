@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -33,5 +35,10 @@ public class ProductScheduleRepositoryImpl implements ProductScheduleRepository 
   @Override
   public void flush() {
     jpaRepository.flush();
+  }
+
+  @Override
+  public Slice<ProductSchedule> findAll(Pageable pageable) {
+    return jpaRepository.findAllBy(pageable);
   }
 }

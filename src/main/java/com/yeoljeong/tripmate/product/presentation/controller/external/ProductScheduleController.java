@@ -1,6 +1,6 @@
 package com.yeoljeong.tripmate.product.presentation.controller.external;
 
-import com.yeoljeong.tripmate.product.application.dto.result.ProductScheduleResult;
+import com.yeoljeong.tripmate.product.application.dto.result.ProductScheduleCommandResult;
 
 import com.yeoljeong.tripmate.product.application.service.command.ProductScheduleCommandService;
 import com.yeoljeong.tripmate.product.presentation.dto.request.ProductScheduleRequest;
@@ -30,7 +30,7 @@ public class ProductScheduleController {
       @RequestBody ProductScheduleRequest request
   ) {
 
-    ProductScheduleResult result =
+    ProductScheduleCommandResult result =
         scheduleCommandService.createSchedules(request.toCommand(productId));
 
     ProductScheduleResponse response = ProductScheduleResponse.from(result);
