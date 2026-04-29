@@ -1,10 +1,8 @@
 package com.yeoljeong.tripmate.product.application.service.query;
 
 import com.yeoljeong.tripmate.product.application.dto.result.ProductAvailabilityResult;
-import com.yeoljeong.tripmate.product.domain.model.ProductSchedule;
 import com.yeoljeong.tripmate.product.domain.repository.ProductScheduleRepository;
 import java.time.LocalDate;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
