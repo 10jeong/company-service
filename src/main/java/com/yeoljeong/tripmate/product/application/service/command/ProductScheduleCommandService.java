@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-class ProductScheduleCommandService {
+public class ProductScheduleCommandService {
 
   private final ProductRepository productRepository;
   private final ProductScheduleRepository scheduleRepository;
