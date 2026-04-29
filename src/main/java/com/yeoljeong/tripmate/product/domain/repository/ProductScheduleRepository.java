@@ -1,6 +1,7 @@
 package com.yeoljeong.tripmate.product.domain.repository;
 
 import com.yeoljeong.tripmate.product.domain.model.ProductSchedule;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -23,4 +24,5 @@ public interface ProductScheduleRepository {
 
   Optional<ProductSchedule> findByIdAndProductId(UUID id, UUID productId);
 
+  Slice<ProductSchedule> findAvailableSchedulesByDate(LocalDate date, Pageable pageable);
 }
