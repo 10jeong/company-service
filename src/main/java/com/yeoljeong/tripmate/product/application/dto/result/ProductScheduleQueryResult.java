@@ -10,7 +10,6 @@ import java.util.UUID;
  */
 public record ProductScheduleQueryResult(
     UUID scheduleId,
-    UUID productId,
     LocalDate date,
     int stock,
     String status
@@ -18,7 +17,6 @@ public record ProductScheduleQueryResult(
   public static ProductScheduleQueryResult from(ProductSchedule schedule) {
     return new ProductScheduleQueryResult(
         schedule.getId(),
-        schedule.getProduct().getId(),
         schedule.getDate(),
         schedule.getStock(),
         schedule.getStatus().name()
