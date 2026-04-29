@@ -1,11 +1,12 @@
 package com.yeoljeong.tripmate.product.presentation.controller.external;
 
-import com.yeoljeong.tripmate.product.application.dto.command.CreateProductScheduleCommand;
 import com.yeoljeong.tripmate.product.application.dto.result.ProductScheduleResult;
 
 import com.yeoljeong.tripmate.product.application.service.command.ProductScheduleCommandService;
 import com.yeoljeong.tripmate.product.presentation.dto.request.ProductScheduleRequest;
 import com.yeoljeong.tripmate.product.presentation.dto.response.ProductScheduleResponse;
+import com.yeoljeong.tripmate.response.ApiResponse;
+import com.yeoljeong.tripmate.response.constants.CommonSuccessCode;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class ProductScheduleController {
 
   //상품 스케줄 일괄 생성
   @PostMapping("/{productId}/schedules/bulk")
-  public ResponseEntity<ProductScheduleResponse> createSchedules(
+  ResponseEntity<ApiResponse<ProductScheduleResponse>> createSchedules(
       @PathVariable UUID productId,
       @RequestBody ProductScheduleRequest request
   ) {
@@ -32,7 +33,10 @@ public class ProductScheduleController {
     ProductScheduleResult result =
         scheduleCommandService.createSchedules(request.toCommand(productId));
 
-    return ResponseEntity.ok(ProductScheduleResponse.from(result));
-  }
-  }
+    ProductScheduleResponse response = ProductScheduleResponse.from(result);
 
+    return ResponseEntity.ok(
+        ApiResponse.success(CommonSuccessCode.OK, response)
+    );
+  }
+}
