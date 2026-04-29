@@ -2,6 +2,7 @@ package com.yeoljeong.tripmate.product.application.service.command;
 
 import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.product.application.dto.command.CreateProductScheduleCommand;
+import com.yeoljeong.tripmate.product.application.dto.result.ProductScheduleResult;
 import com.yeoljeong.tripmate.product.domain.exception.ProductErrorCode;
 import com.yeoljeong.tripmate.product.domain.model.Product;
 import com.yeoljeong.tripmate.product.domain.model.ProductSchedule;
@@ -37,13 +38,21 @@ class ProductScheduleCommandService {
 
   //상품 스케줄 일괄 생성
   @Transactional
-  public void createSchedules(CreateProductScheduleCommand command) {
+  public ProductScheduleResult createSchedules(CreateProductScheduleCommand command) {
 
     Product product = findProduct(command.getProductId());
     validateDate(command);
     List<ProductSchedule> schedules = createSchedulesByDateRange(product, command);
 
     saveSchedules(schedules);
+
+    // 생성 결과 반환
+    return ProductScheduleResult.of(
+        product.getId(),
+        schedules.size(),
+        command.getStartDate(),
+        command.getEndDate()
+    );
   }
 
 
