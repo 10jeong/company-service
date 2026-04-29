@@ -49,11 +49,10 @@ public class ProductScheduleController {
 
   // 스케줄 단건 조회
   @GetMapping("/{productId}/schedules/{scheduleId}")
-  public ApiResponse<ProductScheduleResponse> getSchedule(
+  public ApiResponse<ProductScheduleQueryResponse> getSchedule(
       @PathVariable UUID productId,
       @PathVariable UUID scheduleId
   ) {
-
     ProductScheduleQueryResult result =
         scheduleQueryService.getSchedule(productId, scheduleId);
 
@@ -65,12 +64,11 @@ public class ProductScheduleController {
 
   // 스케줄 목록 조회
   @GetMapping("/{productId}/schedules")
-  public ApiResponse<Slice<ProductScheduleResponse>> getSchedules(
+  public ApiResponse<Slice<ProductScheduleQueryResponse>> getSchedules(
       @PathVariable UUID productId,
       Pageable pageable
   ) {
-
-    Slice<ProductScheduleResponse> response =
+    Slice<ProductScheduleQueryResponse> response =
         scheduleQueryService.getSchedules(productId, pageable)
             .map(ProductScheduleQueryResponse::from);
 
