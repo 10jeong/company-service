@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ProductScheduleJpaRepository extends JpaRepository<ProductSchedule, UUID> {
+
   Slice<ProductSchedule> findAllBy(Pageable pageable);
 
   Slice<ProductSchedule> findAllByProductId(UUID productId, Pageable pageable);
@@ -20,18 +21,20 @@ public interface ProductScheduleJpaRepository extends JpaRepository<ProductSched
 
 
   /**
-   * 특정 날짜에 예약 가능한 스케줄 조회
-   * - status = ACTIVE, stock > 0 인 경우만 조회
-   * - N+1 방지를 위해 product fetch join
+   * 특정 날짜에 예약 가능한 스케줄 조회 - status = ACTIVE, stock > 0 인 경우만 조회 - N+1 방지를 위해 product fetch join
    */
 
   @Query("""
-select s
-from ProductSchedule s
-join fetch s.product p
-where s.date = :date
-  and s.status = com.yeoljeong.tripmate.product.domain.enums.ScheduleStatus.ACTIVE
-  and s.stock > 0
-""")
-  List<ProductSchedule> findAvailableSchedulesByDate(@Param("date") LocalDate date);
+
+      SELECT s
+    FROM ProductSchedule s
+    JOIN FETCH s.product p
+    WHERE s.date = :date
+    AND s.status = com.yeoljeong.tripmate.product.domain.enums.ScheduleStatus.ACTIVE
+    AND s.stock > 0
+    """)
+  Slice<ProductSchedule> findAvailableSchedulesByDate(
+      @Param("date") LocalDate date,
+      Pageable pageable
+  );
 }

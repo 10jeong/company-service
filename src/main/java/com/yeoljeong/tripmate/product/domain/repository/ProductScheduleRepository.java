@@ -24,5 +24,5 @@ public interface ProductScheduleRepository {
 
   Optional<ProductSchedule> findByIdAndProductId(UUID id, UUID productId);
 
-  List<ProductSchedule> findAvailableSchedulesByDate(LocalDate date);
+  Slice<ProductSchedule> findAvailableSchedulesByDate(LocalDate date, Pageable pageable);
 }

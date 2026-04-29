@@ -53,8 +53,8 @@ public class ProductScheduleRepositoryImpl implements ProductScheduleRepository 
     return jpaRepository.findByIdAndProductId(id, productId);
   }
   @Override
-  public List<ProductSchedule> findAvailableSchedulesByDate(LocalDate date) {
-    return jpaRepository.findAvailableSchedulesByDate(date);
+  public Slice<ProductSchedule> findAvailableSchedulesByDate(LocalDate date, Pageable pageable) {
+    return jpaRepository.findAvailableSchedulesByDate(date, pageable);
   }
 
 }
