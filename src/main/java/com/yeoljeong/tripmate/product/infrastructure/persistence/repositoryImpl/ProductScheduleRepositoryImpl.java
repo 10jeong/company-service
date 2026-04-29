@@ -29,4 +29,9 @@ public class ProductScheduleRepositoryImpl implements ProductScheduleRepository 
   public Optional<ProductSchedule> findById(UUID id) {
     return jpaRepository.findById(id);
   }
+
+  @Override
+  public void flush() {
+    jpaRepository.flush();
+  }
 }

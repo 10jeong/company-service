@@ -66,12 +66,24 @@ class ProductScheduleCommandService {
 
   // 날짜 유효성 검증
   private void validateDate(CreateProductScheduleCommand command) {
-    //시작일이 종료일보다 늦을 수 없음
-    if (command.getStartDate().isAfter(command.getEndDate())) {
+
+    LocalDate startDate = command.getStartDate();
+    LocalDate endDate = command.getEndDate();
+
+    // null 체크
+    if (startDate == null || endDate == null) {
       throw new BusinessException(ProductErrorCode.INVALID_DATE);
     }
-    // 31일 제한 추가
-    if (ChronoUnit.DAYS.between(command.getStartDate(), command.getEndDate()) > 31) {
+
+    // 시작일이 종료일보다 늦을 수 없음
+    if (startDate.isAfter(endDate)) {
+      throw new BusinessException(ProductErrorCode.INVALID_DATE);
+    }
+
+    // inclusive 기준 최대 31일 제한
+    long daysInclusive = ChronoUnit.DAYS.between(startDate, endDate) + 1;
+
+    if (daysInclusive > 31) {
       throw new BusinessException(ProductErrorCode.INVALID_DATE_RANGE);
     }
   }
@@ -100,6 +112,7 @@ class ProductScheduleCommandService {
   private void saveSchedules(List<ProductSchedule> schedules) {
     try {
       scheduleRepository.saveAll(schedules);
+      scheduleRepository.flush(); //추가: flush 해야 예외를 여기서 잡을 수 있음
     } catch (DataIntegrityViolationException e) {
       //(product_id + date) UNIQUE 제약 위반 시 예외 변환
       throw new BusinessException(ProductErrorCode.SCHEDULE_ALREADY_EXISTS);

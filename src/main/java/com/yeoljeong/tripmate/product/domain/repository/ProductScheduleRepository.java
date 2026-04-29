@@ -13,4 +13,6 @@ public interface ProductScheduleRepository {
 
   Optional<ProductSchedule> findById(UUID id);
 
+  void flush();
+
 }
