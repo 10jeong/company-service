@@ -2,7 +2,6 @@ package com.yeoljeong.tripmate.product.infrastructure.persistence.jpa;
 
 import com.yeoljeong.tripmate.product.domain.model.ProductSchedule;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +18,7 @@ public interface ProductScheduleJpaRepository extends JpaRepository<ProductSched
 
   Optional<ProductSchedule> findByIdAndProductId(UUID id, UUID productId);
 
-
+  Optional<ProductSchedule> findByProductIdAndId(UUID productId, UUID scheduleId);
   /**
    * 특정 날짜에 예약 가능한 스케줄 조회
    * - status = ACTIVE,
@@ -40,4 +39,6 @@ public interface ProductScheduleJpaRepository extends JpaRepository<ProductSched
       @Param("date") LocalDate date,
       Pageable pageable
   );
+
+
 }

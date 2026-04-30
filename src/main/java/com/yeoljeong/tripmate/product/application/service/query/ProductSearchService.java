@@ -3,6 +3,7 @@ package com.yeoljeong.tripmate.product.application.service.query;
 import com.yeoljeong.tripmate.product.application.dto.result.ProductAvailabilityResult;
 import com.yeoljeong.tripmate.product.domain.repository.ProductScheduleRepository;
 import java.time.LocalDate;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -20,5 +21,14 @@ public class ProductSearchService {
   public Slice<ProductAvailabilityResult> getAvailableProducts(LocalDate date, Pageable pageable) {
     return scheduleRepository.findAvailableSchedulesByDate(date, pageable)
         .map(ProductAvailabilityResult::from);
+  }
+
+  // Feign용 단건 조회
+  public ProductAvailabilityResult getProductSchedule(UUID productId, UUID scheduleId) {
+
+    return scheduleRepository
+        .findByProductIdAndId(productId, scheduleId)
+        .map(ProductAvailabilityResult::from)
+        .orElseThrow(() -> new IllegalArgumentException("해당 상품 스케줄을 찾을 수 없습니다."));
   }
 }
