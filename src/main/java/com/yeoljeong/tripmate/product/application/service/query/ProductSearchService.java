@@ -1,6 +1,8 @@
 package com.yeoljeong.tripmate.product.application.service.query;
 
+import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.product.application.dto.result.ProductAvailabilityResult;
+import com.yeoljeong.tripmate.product.domain.exception.ProductErrorCode;
 import com.yeoljeong.tripmate.product.domain.repository.ProductScheduleRepository;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -29,6 +31,6 @@ public class ProductSearchService {
     return scheduleRepository
         .findByProductIdAndId(productId, scheduleId)
         .map(ProductAvailabilityResult::from)
-        .orElseThrow(() -> new IllegalArgumentException("해당 상품 스케줄을 찾을 수 없습니다."));
+        .orElseThrow(() -> new BusinessException(ProductErrorCode.SCHEDULE_NOT_FOUND));
   }
 }
