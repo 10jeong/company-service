@@ -1,11 +1,11 @@
 package com.yeoljeong.tripmate.product.presentation.dto.response;
 
-import com.yeoljeong.tripmate.product.application.dto.result.ProductAvailabilityResult;
+import com.yeoljeong.tripmate.product.application.dto.result.ProductScheduleInfoResult;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
-public record ProductAvailabilityResponse(
+public record ProductScheduleInfoResponse(
     UUID productId,
     String productName,
     String country,
@@ -17,8 +17,8 @@ public record ProductAvailabilityResponse(
     int stock,
     String status
 ) {
-  public static ProductAvailabilityResponse from(ProductAvailabilityResult result) {
-    return new ProductAvailabilityResponse(
+  public static ProductScheduleInfoResponse from(ProductScheduleInfoResult result) {
+    return new ProductScheduleInfoResponse(
         result.productId(),
         result.productName(),
         result.country(),

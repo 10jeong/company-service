@@ -12,7 +12,7 @@ import java.util.UUID;
  * (Service → Controller)
  */
 
-public record ProductAvailabilityResult(
+public record ProductScheduleInfoResult(
     //Product 정보
     UUID productId,
     String productName,
@@ -28,8 +28,8 @@ public record ProductAvailabilityResult(
     String status
 ) {
 
-  public static ProductAvailabilityResult from(ProductSchedule schedule) {
-    return new ProductAvailabilityResult(
+  public static ProductScheduleInfoResult from(ProductSchedule schedule) {
+    return new ProductScheduleInfoResult(
         schedule.getProduct().getId(),
         schedule.getProduct().getProductName(),
         schedule.getProduct().getAddress().getCountry().name(),

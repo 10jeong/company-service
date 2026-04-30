@@ -1,7 +1,7 @@
 package com.yeoljeong.tripmate.product.application.service.query;
 
 import com.yeoljeong.tripmate.exception.BusinessException;
-import com.yeoljeong.tripmate.product.application.dto.result.ProductAvailabilityResult;
+import com.yeoljeong.tripmate.product.application.dto.result.ProductScheduleInfoResult;
 import com.yeoljeong.tripmate.product.domain.exception.ProductErrorCode;
 import com.yeoljeong.tripmate.product.domain.repository.ProductScheduleRepository;
 import java.time.LocalDate;
@@ -20,17 +20,17 @@ public class ProductSearchService {
   private final ProductScheduleRepository scheduleRepository;
 
   // 날짜 기준으로 예약 가능한 상품 조회
-  public Slice<ProductAvailabilityResult> getAvailableProducts(LocalDate date, Pageable pageable) {
+  public Slice<ProductScheduleInfoResult> getAvailableProducts(LocalDate date, Pageable pageable) {
     return scheduleRepository.findAvailableSchedulesByDate(date, pageable)
-        .map(ProductAvailabilityResult::from);
+        .map(ProductScheduleInfoResult::from);
   }
 
   // Feign용 단건 조회
-  public ProductAvailabilityResult getProductSchedule(UUID productId, UUID scheduleId) {
+  public ProductScheduleInfoResult getProductSchedule(UUID productId, UUID scheduleId) {
 
     return scheduleRepository
         .findByIdAndProductId(scheduleId, productId)
-        .map(ProductAvailabilityResult::from)
+        .map(ProductScheduleInfoResult::from)
         .orElseThrow(() -> new BusinessException(ProductErrorCode.SCHEDULE_NOT_FOUND));
   }
 }
