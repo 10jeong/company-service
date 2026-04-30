@@ -18,7 +18,6 @@ public interface ProductScheduleJpaRepository extends JpaRepository<ProductSched
 
   Optional<ProductSchedule> findByIdAndProductId(UUID id, UUID productId);
 
-  Optional<ProductSchedule> findByProductIdAndId(UUID productId, UUID scheduleId);
   /**
    * 특정 날짜에 예약 가능한 스케줄 조회
    * - status = ACTIVE,
