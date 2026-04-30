@@ -13,19 +13,21 @@ import java.util.UUID;
  */
 
 public record ProductScheduleInfoResult(
-    //Product 정보
+    // Product 정보
     UUID productId,
     String productName,
     String country,
     String state,
     String city,
-    String addressLine,
     BigDecimal price,
+    String productStatus,
+
 
     //Product Schedule 정보
+    UUID scheduleId,
     LocalDate date,
     int stock,
-    String status
+    String scheduleStatus
 ) {
 
   public static ProductScheduleInfoResult from(ProductSchedule schedule) {
@@ -35,8 +37,9 @@ public record ProductScheduleInfoResult(
         schedule.getProduct().getAddress().getCountry().name(),
         schedule.getProduct().getAddress().getState(),
         schedule.getProduct().getAddress().getCity(),
-        schedule.getProduct().getAddress().getAddressLine(),
         schedule.getProduct().getPrice(),
+        schedule.getProduct().getStatus().name(),
+        schedule.getId(),
         schedule.getDate(),
         schedule.getStock(),
         schedule.getStatus().name()

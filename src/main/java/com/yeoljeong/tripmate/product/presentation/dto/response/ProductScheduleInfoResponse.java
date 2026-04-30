@@ -6,16 +6,20 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public record ProductScheduleInfoResponse(
+    // Product 정보
     UUID productId,
     String productName,
     String country,
     String state,
     String city,
-    String addressLine,
     BigDecimal price,
+    String productStatus,
+
+    //Product Schedule 정보
+    UUID scheduleId,
     LocalDate date,
     int stock,
-    String status
+    String scheduleStatus
 ) {
   public static ProductScheduleInfoResponse from(ProductScheduleInfoResult result) {
     return new ProductScheduleInfoResponse(
@@ -24,11 +28,12 @@ public record ProductScheduleInfoResponse(
         result.country(),
         result.state(),
         result.city(),
-        result.addressLine(),
         result.price(),
+        result.productStatus(),
+        result.scheduleId(),
         result.date(),
         result.stock(),
-        result.status()
+        result.scheduleStatus()
     );
   }
 }
