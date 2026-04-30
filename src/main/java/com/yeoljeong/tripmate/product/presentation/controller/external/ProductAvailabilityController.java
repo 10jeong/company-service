@@ -1,7 +1,7 @@
 package com.yeoljeong.tripmate.product.presentation.controller.external;
 
 import com.yeoljeong.tripmate.product.application.service.query.ProductSearchService;
-import com.yeoljeong.tripmate.product.presentation.dto.response.ProductAvailabilityResponse;
+import com.yeoljeong.tripmate.product.presentation.dto.response.ProductScheduleInfoResponse;
 import com.yeoljeong.tripmate.response.ApiResponse;
 import com.yeoljeong.tripmate.response.constants.CommonSuccessCode;
 import java.time.LocalDate;
@@ -23,13 +23,13 @@ public class ProductAvailabilityController {
 
   // 날짜 기준 예약 가능한 상품 조회
   @GetMapping("/available")
-  public ApiResponse<Slice<ProductAvailabilityResponse>> getAvailableProducts(
+  public ApiResponse<Slice<ProductScheduleInfoResponse>> getAvailableProducts(
       @RequestParam LocalDate date,
       @PageableDefault(size = 10) Pageable pageable
   ) {
-    Slice<ProductAvailabilityResponse> response =
+    Slice<ProductScheduleInfoResponse> response =
         searchService.getAvailableProducts(date, pageable)
-            .map(ProductAvailabilityResponse::from);
+            .map(ProductScheduleInfoResponse::from);
 
     return ApiResponse.success(CommonSuccessCode.OK, response);
   }

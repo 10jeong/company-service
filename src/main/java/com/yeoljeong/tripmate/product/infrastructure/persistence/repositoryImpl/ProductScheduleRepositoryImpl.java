@@ -57,4 +57,5 @@ public class ProductScheduleRepositoryImpl implements ProductScheduleRepository 
     return jpaRepository.findAvailableSchedulesByDate(date, pageable);
   }
 
+
 }
