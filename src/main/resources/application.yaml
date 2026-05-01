@@ -1,7 +1,9 @@
 spring:
+  profiles:
+    active: dev
+
   application:
     name: company-service
-
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:43.200.28.227:29092}
 
