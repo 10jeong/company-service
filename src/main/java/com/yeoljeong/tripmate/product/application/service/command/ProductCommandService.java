@@ -1,6 +1,5 @@
 package com.yeoljeong.tripmate.product.application.service.command;
 
-import com.yeoljeong.tripmate.company.domain.enums.CompanyStatus;
 import com.yeoljeong.tripmate.company.presentation.dto.response.CompanyResponse;
 import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.product.application.dto.command.CreateProductCommand;
@@ -22,10 +21,10 @@ public class ProductCommandService {
 
   //상품 생성
   /**
-   * 업체 조회
-   * 업체 검증
-   * 상품 엔티티 생성 및 저장
-   * */
+   * - 업체 조회(FeignClient 내부 통신)
+   * - 업체 권한 및 상태 검증
+   * - 상품 엔티티 생성 및 저장
+   */
   public ProductResult createProduct(
       CreateProductCommand command,
       UUID createdBy
