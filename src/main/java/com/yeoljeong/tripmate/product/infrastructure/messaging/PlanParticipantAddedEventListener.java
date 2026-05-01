@@ -24,8 +24,11 @@ public class PlanParticipantAddedEventListener {
         event.quantity()
     );
 
-    // TODO
-    // 재고 차감 로직 연결 예정
-    // 중복 처리(idempotency) 적용 예정
+    //TODO 재고 차감 로직
+    // 1. 중복 처리 방지
+    // 2. 재고 차감 서비스 호출
+    // 3. 처리 완료 기록
+    // 4. offset 커밋
+
   }
 }
