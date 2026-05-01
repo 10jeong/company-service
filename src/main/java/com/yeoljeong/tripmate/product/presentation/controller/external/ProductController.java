@@ -1,5 +1,8 @@
 package com.yeoljeong.tripmate.product.presentation.controller.external;
 
+import com.yeoljeong.tripmate.auth.annotation.LoginUser;
+import com.yeoljeong.tripmate.auth.annotation.RequireRole;
+import com.yeoljeong.tripmate.auth.context.UserContext;
 import com.yeoljeong.tripmate.product.application.dto.command.CreateProductCommand;
 import com.yeoljeong.tripmate.product.application.dto.result.ProductResult;
 import com.yeoljeong.tripmate.product.application.service.command.ProductCommandService;
@@ -25,19 +28,25 @@ public class ProductController {
   private final ProductQueryService productQueryService;
 
   // 상품 생성
-  //1. 지금 → @RequestHeader로 임시 처리
-  //2. 나중에 Gateway 구현되면 → 자동으로 헤더에 들어옴
-  //3.1 토큰 구현되면 → @AuthenticationPrincipal로 변경
-  //3.2 나중에 Gateway + Common Module 구현되면 → @CurrentUser UserContext로 변경 ?
+  @RequireRole("SELLER")
   @PostMapping
   public ApiResponse<ProductResponse> createProduct(
       @RequestBody @Valid ProductRequest request,
-      @RequestHeader("X-User-Id") UUID userId,
-      @RequestHeader("X-Company-Id") UUID companyId
+      @RequestHeader("X-Company-Id") UUID companyId,
+      @LoginUser UserContext user
   ) {
     CreateProductCommand command = request.toCommand(companyId);
-    ProductResult result = productCommandService.createProduct(command);
+
+    // JWT 토큰의 userId는 String 타입으로 전달되므로
+    // 서비스 계층에서 사용하기 위해 UUID로 변환함
+    ProductResult result =
+        productCommandService.createProduct(
+            command,
+            UUID.fromString(user.userId())
+        );
+
     ProductResponse response = ProductResponse.from(result);
+
     return ApiResponse.success(CommonSuccessCode.CREATE, response);
   }
 

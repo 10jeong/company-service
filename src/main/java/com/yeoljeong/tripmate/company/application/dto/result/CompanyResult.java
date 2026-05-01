@@ -17,6 +17,7 @@ import java.util.UUID;
 public class CompanyResult {
 
   private UUID id;
+  private UUID createdBy;
   private String name;
   private String businessNumber;
   private String description;
@@ -29,6 +30,7 @@ public class CompanyResult {
   public static CompanyResult from(Company company) {
     return CompanyResult.builder()
         .id(company.getId())
+        .createdBy(company.getCreatedBy())
         .name(company.getName())
         .businessNumber(company.getBusinessNumber())
         .description(company.getDescription())
