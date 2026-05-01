@@ -1,5 +1,6 @@
 package com.yeoljeong.tripmate.company.presentation.controller.external;
 
+import com.yeoljeong.tripmate.auth.annotation.RequireRole;
 import com.yeoljeong.tripmate.company.application.dto.result.CompanyResult;
 import com.yeoljeong.tripmate.company.application.service.command.CompanyCommandService;
 import com.yeoljeong.tripmate.company.application.service.query.CompanyQueryService;
@@ -22,6 +23,7 @@ public class CompanyController {
   private final CompanyQueryService queryService;
 
   // 생성
+  @RequireRole("SELLER")
   @PostMapping
   public ApiResponse<CompanyResponse> createCompany(
       @Valid @RequestBody CompanyRequest request

@@ -30,7 +30,7 @@ public class ProductScheduleCommandService {
 
   /**
    * 상품 스케줄 일괄 생성
-   * - 상품 조회
+   * - 상품 존재 여부 확인
    * - 날짜 유효성 검증
    * - 날짜 범위 기반 스케줄 생성
    * - 일괄 저장 (중복은 DB UNIQUE 로 처리)
@@ -58,7 +58,7 @@ public class ProductScheduleCommandService {
 
   // ==메서드==
 
-  // 상품 조회
+  //상품 존재 여부 확인
   private Product findProduct(UUID productId) {
     return productRepository.findById(productId)
         .orElseThrow(() -> new BusinessException(ProductErrorCode.PRODUCT_NOT_FOUND));
