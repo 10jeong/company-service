@@ -1,4 +1,4 @@
-@port = 62581
+@port = 8080
 @host = http://localhost:{{port}}
 @companyId = 98f0abb6-26ec-4d85-84cd-d7adde81cd10
 @userId = 00000000-0000-0000-0000-000000000000
