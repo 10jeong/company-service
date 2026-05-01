@@ -41,7 +41,7 @@ dependencies {
 
     implementation 'org.springframework.kafka:spring-kafka'
 
-    implementation 'com.yeoljeong:common-module:0.0.6-SNAPSHOT'
+    implementation 'com.yeoljeong:common-module:0.0.8'
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'org.postgresql:postgresql:42.7.3'
