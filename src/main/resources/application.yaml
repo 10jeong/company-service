@@ -2,21 +2,41 @@ spring:
   application:
     name: company-service
 
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:43.200.28.227:29092}
+
+    consumer:
+      group-id: company-service
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+
+      properties:
+        spring.json.trusted.packages: "com.yeoljeong.tripmate.*"
+        spring.json.use.type.headers: true
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+      properties:
+        spring.json.add.type.headers: true
+
+    listener:
+      ack-mode: manual
+      missing-topics-fatal: false
+
+  retry:
+    interval: 1000
+    max-attempts: 3
+
   datasource:
     url: jdbc:postgresql://localhost:${DB_PORT:5432}/${DB_NAME:tripmate_postgres}
     username: ${DB_USER:tripmate}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
-
-  jpa:
-    hibernate:
-      ddl-auto: update    # create / validate
-    show-sql: true
-    properties:
-      hibernate:
-        default_schema: company
-        format_sql: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 server:
   port: 0
@@ -25,17 +45,6 @@ eureka:
   client:
     service-url:
       defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka}
+
   instance:
-   instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
-
-#eureka:
-#  client:
-#    service-url:
-#      defaultZone: https://dolphin-device-evident.ngrok-free.dev/eureka/
-#      fetch-registry: true
-
-#  instance:
-#    hostname: "resupply-botch-styling.ngrok-free.dev"
-#    non-secure-port: 80
-
-#    prefer-ip-address: false
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
