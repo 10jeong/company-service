@@ -11,6 +11,10 @@ public enum ProductErrorCode implements ErrorCode {
   INVALID_PRODUCT_PRICE(HttpStatus.BAD_REQUEST, "상품 가격이 올바르지 않습니다."),
   INVALID_PRODUCT_ADDRESS(HttpStatus.BAD_REQUEST, "상품 주소가 올바르지 않습니다."),
 
+  // 상품 권한
+  UNAUTHORIZED_COMPANY_ACCESS(HttpStatus.FORBIDDEN, "본인 업체만 상품을 등록할 수 있습니다."),
+  INVALID_COMPANY_STATUS(HttpStatus.BAD_REQUEST, "승인된 업체만 상품을 등록할 수 있습니다."),
+
   // 스케줄 - 날짜
   INVALID_DATE(HttpStatus.BAD_REQUEST, "날짜는 필수입니다."),
   INVALID_DATE_RANGE(HttpStatus.BAD_REQUEST, "스케줄 생성 가능한 날짜 범위는 최대 31일입니다."),

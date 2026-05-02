@@ -1,5 +1,8 @@
 package com.yeoljeong.tripmate.product.presentation.controller.external;
 
+import com.yeoljeong.tripmate.auth.annotation.LoginUser;
+import com.yeoljeong.tripmate.auth.annotation.RequireRole;
+import com.yeoljeong.tripmate.auth.context.UserContext;
 import com.yeoljeong.tripmate.product.application.dto.result.ProductScheduleCommandResult;
 
 import com.yeoljeong.tripmate.product.application.dto.result.ProductScheduleQueryResult;
@@ -31,15 +34,23 @@ public class ProductScheduleController {
   private final ProductScheduleCommandService scheduleCommandService;
   private final ProductScheduleQueryService scheduleQueryService;
 
-  //상품 스케줄 일괄 생성
+  // 상품 스케줄 일괄 생성
+  @RequireRole("SELLER")
   @PostMapping("/{productId}/schedules/bulk")
   ResponseEntity<ApiResponse<ProductScheduleResponse>> createSchedules(
       @PathVariable UUID productId,
-      @RequestBody ProductScheduleRequest request
+      @RequestBody ProductScheduleRequest request,
+      @LoginUser UserContext user
   ) {
 
     ProductScheduleCommandResult result =
-        scheduleCommandService.createSchedules(request.toCommand(productId));
+        scheduleCommandService.createSchedules(
+            request.toCommand(productId),
+
+            // JWT 토큰의 userId는 String 타입으로 전달되므로
+            // 서비스 계층에서 사용하기 위해 UUID로 변환
+            UUID.fromString(user.userId())
+        );
 
     ProductScheduleResponse response = ProductScheduleResponse.from(result);
 

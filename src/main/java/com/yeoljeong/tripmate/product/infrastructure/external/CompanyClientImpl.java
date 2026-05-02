@@ -17,6 +17,6 @@ public class CompanyClientImpl implements CompanyClient {
 
     return companyFeignClient
         .getCompany(companyId)
-        .getData();
+        .data();
   }
 }

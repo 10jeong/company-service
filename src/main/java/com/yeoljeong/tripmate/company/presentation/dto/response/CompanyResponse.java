@@ -11,6 +11,7 @@ import java.util.UUID;
 public record CompanyResponse(
 
     UUID id,
+    UUID createdBy,
     String name,
     String businessNumber,
     String description,
@@ -20,9 +21,17 @@ public record CompanyResponse(
     LocalDateTime createdAt
 
 ) {
+
+  // 업체 활성 상태 여부 반환
+  // 상품 등록 가능한 업체인지 검증할 때 사용
+  public boolean isActive() {
+    return "ACTIVE".equals(status);
+  }
+
   public static CompanyResponse from(CompanyResult result) {
     return new CompanyResponse(
         result.getId(),
+        result.getCreatedBy(),
         result.getName(),
         result.getBusinessNumber(),
         result.getDescription(),

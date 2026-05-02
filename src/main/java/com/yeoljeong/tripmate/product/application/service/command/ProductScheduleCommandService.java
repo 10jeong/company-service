@@ -1,8 +1,10 @@
 package com.yeoljeong.tripmate.product.application.service.command;
 
+import com.yeoljeong.tripmate.company.presentation.dto.response.CompanyResponse;
 import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.product.application.dto.command.CreateProductScheduleCommand;
 import com.yeoljeong.tripmate.product.application.dto.result.ProductScheduleCommandResult;
+import com.yeoljeong.tripmate.product.application.service.client.CompanyClient;
 import com.yeoljeong.tripmate.product.domain.exception.ProductErrorCode;
 import com.yeoljeong.tripmate.product.domain.model.Product;
 import com.yeoljeong.tripmate.product.domain.model.ProductSchedule;
@@ -27,10 +29,13 @@ public class ProductScheduleCommandService {
 
   private final ProductRepository productRepository;
   private final ProductScheduleRepository scheduleRepository;
+  private final CompanyClient companyClient;
 
   /**
    * 상품 스케줄 일괄 생성
    * - 상품 존재 여부 확인
+   * - 상품의 업체 조회(FeignClient 내부 통신)
+   * - 업체 검증
    * - 날짜 유효성 검증
    * - 날짜 범위 기반 스케줄 생성
    * - 일괄 저장 (중복은 DB UNIQUE 로 처리)
@@ -38,11 +43,23 @@ public class ProductScheduleCommandService {
 
   //상품 스케줄 일괄 생성
   @Transactional
-  public ProductScheduleCommandResult createSchedules(CreateProductScheduleCommand command) {
+  public ProductScheduleCommandResult createSchedules(
+      CreateProductScheduleCommand command,
+      UUID createdBy
+  ) {
+
+    validateDate(command);
 
     Product product = findProduct(command.getProductId());
-    validateDate(command);
-    List<ProductSchedule> schedules = createSchedulesByDateRange(product, command);
+
+    CompanyResponse company =
+        companyClient.getCompany(product.getCompanyId());
+
+    validateCompany(company, createdBy);
+
+
+    List<ProductSchedule> schedules =
+        createSchedulesByDateRange(product, command);
 
     saveSchedules(schedules);
 
@@ -55,13 +72,29 @@ public class ProductScheduleCommandService {
     );
   }
 
-
-  // ==메서드==
+  // 메서드
 
   //상품 존재 여부 확인
   private Product findProduct(UUID productId) {
     return productRepository.findById(productId)
         .orElseThrow(() -> new BusinessException(ProductErrorCode.PRODUCT_NOT_FOUND));
+  }
+
+  // 업체 검증
+  private void validateCompany(
+      CompanyResponse company,
+      UUID createdBy
+  ) {
+
+    // 현재 로그인한 사용자가 업체 생성자인지 검증
+    if (!company.createdBy().equals(createdBy)) {
+      throw new BusinessException(ProductErrorCode.UNAUTHORIZED_COMPANY_ACCESS);
+    }
+
+    // 업체 활성 상태 검증
+    if (!company.isActive()) {
+      throw new BusinessException(ProductErrorCode.INVALID_COMPANY_STATUS);
+    }
   }
 
   // 날짜 유효성 검증
@@ -101,7 +134,7 @@ public class ProductScheduleCommandService {
 
     // startDate부터 endDate까지 하루씩 증가하며 스케줄 생성
     while (!current.isAfter(command.getEndDate())) {
-      schedules.add( ProductSchedule.create(product, current, command.getStock()) );
+      schedules.add(ProductSchedule.create(product, current, command.getStock()));
       current = current.plusDays(1); // 다음 날짜로 이동
     }
 
