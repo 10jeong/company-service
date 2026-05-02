@@ -46,10 +46,7 @@ public class ProductScheduleController {
     ProductScheduleCommandResult result =
         scheduleCommandService.createSchedules(
             request.toCommand(productId),
-
-            // JWT 토큰의 userId는 String 타입으로 전달되므로
-            // 서비스 계층에서 사용하기 위해 UUID로 변환
-            UUID.fromString(user.userId())
+            user.userId()
         );
 
     ProductScheduleResponse response = ProductScheduleResponse.from(result);
