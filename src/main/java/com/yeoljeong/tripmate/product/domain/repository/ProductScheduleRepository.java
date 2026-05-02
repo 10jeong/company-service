@@ -32,6 +32,7 @@ public interface ProductScheduleRepository {
   // 조회 전용 스케줄 단건 조회
   // - 락 없음
   // - readOnly transaction 에서 사용
+  // - 주문 내부 통신용
   // - 스케줄 조회 API 용도
   Optional<ProductSchedule> findReadOnlyByIdAndProductId(
       UUID id,

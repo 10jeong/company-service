@@ -1,8 +1,8 @@
 package com.yeoljeong.tripmate.product.infrastructure.messaging;
 
+import com.yeoljeong.tripmate.event.PlanUnitParticipantAddedEvent;
 import com.yeoljeong.tripmate.event.enums.PlanTopic;
 import com.yeoljeong.tripmate.product.application.service.command.ProductScheduleStockService;
-import com.yeoljeong.tripmate.product.infrastructure.messaging.ScheduleParticipantAddedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -17,11 +17,11 @@ public class PlanParticipantAddedEventListener {
   private final ProductScheduleStockService stockService;
 
   @KafkaListener(
-      topics = PlanTopic.PLAN_PARTICIPANT_ADDED_TOPIC,
+      topics = PlanTopic.PLAN_UNIT_PARTICIPANT_ADDED_TOPIC,
       groupId = "company-service"
   )
   public void handleScheduleParticipantAdded(
-      ScheduleParticipantAddedEvent event,
+      PlanUnitParticipantAddedEvent event,
       Acknowledgment ack
   ) {
     log.info("plan.participant.added 이벤트 수신 - scheduleId={}, quantity={}",

@@ -29,7 +29,7 @@ public class ProductSearchService {
   public ProductScheduleInfoResult getProductSchedule(UUID productId, UUID scheduleId) {
 
     return scheduleRepository
-        .findByIdAndProductId(scheduleId, productId)
+        .findReadOnlyByIdAndProductId(scheduleId, productId)
         .map(ProductScheduleInfoResult::from)
         .orElseThrow(() -> new BusinessException(ProductErrorCode.SCHEDULE_NOT_FOUND));
   }
