@@ -5,7 +5,7 @@ spring:
   application:
     name: company-service
   kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:43.200.28.227:29092}
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:hutuo-175-113-45-79.run.pinggy-free.link:35121}
 
     consumer:
       group-id: company-service

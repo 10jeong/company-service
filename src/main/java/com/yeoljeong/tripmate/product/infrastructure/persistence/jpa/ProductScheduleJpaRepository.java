@@ -33,9 +33,10 @@ public interface ProductScheduleJpaRepository
       UUID productId
   );
 
-  // 재고 차감/구매 처리용 조회
+  // 재고 차감/주문 내부 통신용 조회
   // - 비관적 락 사용
-  // - 동시에 여러 예약 요청이 들어와도 재고 정합성 보장
+  // - 주문 내부 통신용
+  // - 동시에 여러 예약 요청이 들어 와도 재고 정합성 보장
   @Lock(LockModeType.PESSIMISTIC_WRITE)
   Optional<ProductSchedule> findByIdAndProductId(
       UUID id,
