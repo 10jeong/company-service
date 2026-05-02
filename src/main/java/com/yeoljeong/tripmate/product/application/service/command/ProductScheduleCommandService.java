@@ -48,13 +48,14 @@ public class ProductScheduleCommandService {
       UUID createdBy
   ) {
 
+    validateDate(command);
+
     Product product = findProduct(command.getProductId());
 
     CompanyResponse company = companyClient.getCompany(product.getCompanyId());
 
     validateCompany(company, createdBy);
 
-    validateDate(command);
 
     List<ProductSchedule> schedules =
         createSchedulesByDateRange(product, command);
