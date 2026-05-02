@@ -52,7 +52,8 @@ public class ProductScheduleCommandService {
 
     Product product = findProduct(command.getProductId());
 
-    CompanyResponse company = companyClient.getCompany(product.getCompanyId());
+    CompanyResponse company =
+        companyClient.getCompany(product.getCompanyId());
 
     validateCompany(company, createdBy);
 
@@ -70,7 +71,6 @@ public class ProductScheduleCommandService {
         command.getEndDate()
     );
   }
-
 
   // 메서드
 
