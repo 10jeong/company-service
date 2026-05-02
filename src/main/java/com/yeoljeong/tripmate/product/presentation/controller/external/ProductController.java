@@ -37,12 +37,11 @@ public class ProductController {
   ) {
     CreateProductCommand command = request.toCommand(companyId);
 
-    // JWT 토큰의 userId는 String 타입으로 전달되므로
-    // 서비스 계층에서 사용하기 위해 UUID로 변환함
+
     ProductResult result =
         productCommandService.createProduct(
             command,
-            UUID.fromString(user.userId())
+            user.userId()
         );
 
     ProductResponse response = ProductResponse.from(result);
