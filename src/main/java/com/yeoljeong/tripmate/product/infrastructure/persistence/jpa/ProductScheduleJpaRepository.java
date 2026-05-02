@@ -18,6 +18,11 @@ public interface ProductScheduleJpaRepository extends JpaRepository<ProductSched
 
   Slice<ProductSchedule> findAllByProductId(UUID productId, Pageable pageable);
 
+  Optional<ProductSchedule> findReadOnlyByIdAndProductId(
+      UUID id,
+      UUID productId
+  );
+
   @Lock(LockModeType.PESSIMISTIC_WRITE)
   Optional<ProductSchedule> findByIdAndProductId(UUID id, UUID productId);
 
