@@ -28,14 +28,14 @@ public interface ProductScheduleJpaRepository
   // - 락 없음
   // - readOnly transaction 에서 사용
   // - 스케줄 조회 API 용도
+  //-  주문 조회 에 사용하는 내부 통신용 조회
   Optional<ProductSchedule> findReadOnlyByIdAndProductId(
       UUID id,
       UUID productId
   );
 
-  // 재고 차감/주문 내부 통신용 조회
+  // 재고 차감
   // - 비관적 락 사용
-  // - 주문 내부 통신용
   // - 동시에 여러 예약 요청이 들어 와도 재고 정합성 보장
   @Lock(LockModeType.PESSIMISTIC_WRITE)
   Optional<ProductSchedule> findByIdAndProductId(

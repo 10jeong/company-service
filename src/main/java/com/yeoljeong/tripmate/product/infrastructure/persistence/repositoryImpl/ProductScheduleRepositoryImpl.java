@@ -68,6 +68,7 @@ public class ProductScheduleRepositoryImpl implements ProductScheduleRepository 
   // - 락 없음
   // - readOnly transaction 에서 사용
   // - 스케줄 조회 API 용도
+  // - 주문에 주는 상품 정보 조회 (내부 통신용)
   @Override
   public Optional<ProductSchedule> findReadOnlyByIdAndProductId(
       UUID id,
