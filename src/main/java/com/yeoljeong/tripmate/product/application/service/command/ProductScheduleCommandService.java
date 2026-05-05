@@ -20,8 +20,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-//Product: DTO → toEntity → save
-//Schedule: DTO → Service 로직 → 여러 Entity 생성 → saveAll
 
 @Service
 @RequiredArgsConstructor
@@ -31,17 +29,16 @@ public class ProductScheduleCommandService {
   private final ProductScheduleRepository scheduleRepository;
   private final CompanyClient companyClient;
 
+  //상품 스케줄 일괄 생성
+
   /**
    * 상품 스케줄 일괄 생성
    * - 상품 존재 여부 확인
    * - 상품의 업체 조회(FeignClient 내부 통신)
-   * - 업체 검증
-   * - 날짜 유효성 검증
+   * - 업체 검증 - 날짜 유효성 검증
    * - 날짜 범위 기반 스케줄 생성
    * - 일괄 저장 (중복은 DB UNIQUE 로 처리)
    */
-
-  //상품 스케줄 일괄 생성
   @Transactional
   public ProductScheduleCommandResult createSchedules(
       CreateProductScheduleCommand command,
@@ -57,7 +54,6 @@ public class ProductScheduleCommandService {
 
     validateCompany(company, createdBy);
 
-
     List<ProductSchedule> schedules =
         createSchedulesByDateRange(product, command);
 
@@ -72,8 +68,18 @@ public class ProductScheduleCommandService {
     );
   }
 
-  // 메서드
+  //재고 차감
+  @Transactional
+  public void deductStock(UUID productId, UUID scheduleId, int quantity) {
+    ProductSchedule schedule = scheduleRepository
+        .findByIdAndProductId(scheduleId, productId)
+        .orElseThrow(() -> new BusinessException(ProductErrorCode.SCHEDULE_NOT_FOUND));
 
+    schedule.decreaseStock(quantity);
+  }
+
+
+  /** 메서드 **/
   //상품 존재 여부 확인
   private Product findProduct(UUID productId) {
     return productRepository.findById(productId)

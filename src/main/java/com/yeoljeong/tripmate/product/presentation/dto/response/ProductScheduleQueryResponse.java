@@ -4,6 +4,7 @@ import com.yeoljeong.tripmate.product.application.dto.result.ProductScheduleQuer
 import java.time.LocalDate;
 import java.util.UUID;
 
+// 스케줄 목록 조회 응답
 public record ProductScheduleQueryResponse(
     UUID scheduleId,
     LocalDate date,

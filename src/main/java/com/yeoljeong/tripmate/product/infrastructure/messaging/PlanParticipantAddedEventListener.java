@@ -2,7 +2,7 @@ package com.yeoljeong.tripmate.product.infrastructure.messaging;
 
 import com.yeoljeong.tripmate.event.PlanUnitParticipantAddedEvent;
 import com.yeoljeong.tripmate.event.enums.PlanTopic;
-import com.yeoljeong.tripmate.product.application.service.command.ProductScheduleStockService;
+import com.yeoljeong.tripmate.product.application.service.command.ProductScheduleCommandService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class PlanParticipantAddedEventListener {
 
-  private final ProductScheduleStockService stockService;
+  private final ProductScheduleCommandService productScheduleCommandService;
 
   @KafkaListener(
       topics = PlanTopic.PLAN_UNIT_PARTICIPANT_ADDED_TOPIC,
@@ -28,7 +28,11 @@ public class PlanParticipantAddedEventListener {
         event.scheduleId(), event.quantity());
 
     // 재고 차감 서비스 호출
-    stockService.deductStock(event.productId(), event.scheduleId(), event.quantity());
+    productScheduleCommandService.deductStock(
+        event.productId(),
+        event.scheduleId(),
+        event.quantity()
+    );
 
     // TODO: MVP 이후 멱등성 처리 추가 예정 (ProcessedEvent 테이블로 중복 방지)
 

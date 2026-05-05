@@ -42,6 +42,7 @@ public class ProductCommandService {
     return ProductResult.from(saved);
   }
 
+  /** 메서드 **/
   //업체 검증 메서드
   private void validateCompany(
       CompanyResponse company,

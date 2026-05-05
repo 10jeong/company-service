@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,6 +41,7 @@ public class ProductScheduleController {
   ResponseEntity<ApiResponse<ProductScheduleResponse>> createSchedules(
       @PathVariable UUID productId,
       @RequestBody ProductScheduleRequest request,
+      @RequestHeader("X-Company-Id") UUID companyId,
       @LoginUser UserContext user
   ) {
 
@@ -75,7 +77,7 @@ public class ProductScheduleController {
   @GetMapping("/{productId}/schedules")
   public ApiResponse<Slice<ProductScheduleQueryResponse>> getSchedules(
       @PathVariable UUID productId,
-      @PageableDefault(size = 10) Pageable pageable
+      @PageableDefault(size = 50) Pageable pageable
   ) {
     Slice<ProductScheduleQueryResponse> response =
         scheduleQueryService.getSchedules(productId, pageable)
