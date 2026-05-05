@@ -5,6 +5,9 @@ import com.yeoljeong.tripmate.product.domain.model.ProductAddress;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+//상품 생성 응답
+//상품 단건 조회 응답
+// 상품 목록 조회 응답
 public record ProductResponse(
 
     UUID id,
