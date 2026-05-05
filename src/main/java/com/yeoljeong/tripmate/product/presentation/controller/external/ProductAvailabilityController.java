@@ -1,6 +1,6 @@
 package com.yeoljeong.tripmate.product.presentation.controller.external;
 
-import com.yeoljeong.tripmate.product.application.service.query.ProductSearchService;
+import com.yeoljeong.tripmate.product.application.service.query.ProductScheduleQueryService;
 import com.yeoljeong.tripmate.product.presentation.dto.response.ProductScheduleInfoResponse;
 import com.yeoljeong.tripmate.response.ApiResponse;
 import com.yeoljeong.tripmate.response.constants.CommonSuccessCode;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/products")
 public class ProductAvailabilityController {
 
-  private final ProductSearchService searchService;
+  private final ProductScheduleQueryService productScheduleQueryService;
 
   // 날짜 기준 예약 가능한 상품 조회
   @GetMapping("/available")
@@ -28,7 +28,7 @@ public class ProductAvailabilityController {
       @PageableDefault(size = 10) Pageable pageable
   ) {
     Slice<ProductScheduleInfoResponse> response =
-        searchService.getAvailableProducts(date, pageable)
+        productScheduleQueryService.getAvailableProducts(date, pageable)
             .map(ProductScheduleInfoResponse::from);
 
     return ApiResponse.success(CommonSuccessCode.OK, response);
