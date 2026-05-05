@@ -25,11 +25,23 @@ public class ProductSearchService {
         .map(ProductScheduleInfoResult::from);
   }
 
-  // Feign용 단건 조회
+
+  // 검증 포함 조회 (productId + scheduleId)
+  // (내부통신용) 주문시 사용 하는 상품,스케줄 정보
   public ProductScheduleInfoResult getProductSchedule(UUID productId, UUID scheduleId) {
 
     return scheduleRepository
         .findReadOnlyByIdAndProductId(scheduleId, productId)
+        .map(ProductScheduleInfoResult::from)
+        .orElseThrow(() -> new BusinessException(ProductErrorCode.SCHEDULE_NOT_FOUND));
+  }
+
+  // scheduleId 단건 조회
+  // (내부통신용) 일정 확정시 사용하는 상품,스케줄 정보
+  public ProductScheduleInfoResult getSchedule(UUID scheduleId) {
+
+    return scheduleRepository
+        .findReadOnlyById(scheduleId)
         .map(ProductScheduleInfoResult::from)
         .orElseThrow(() -> new BusinessException(ProductErrorCode.SCHEDULE_NOT_FOUND));
   }

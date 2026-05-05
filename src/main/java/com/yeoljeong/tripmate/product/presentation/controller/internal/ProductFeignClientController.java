@@ -20,12 +20,12 @@ public class ProductFeignClientController {
   private final ProductSearchService productSearchService;
 
   //일정 확정시 사용 하는 상품 정보
-  @GetMapping("/{productId}")
-  public ProductPlanResponse getProduct(
-      @PathVariable UUID productId
+  @GetMapping("/schedules/{scheduleId}")
+  public ProductScheduleInfoResponse getSchedule(
+      @PathVariable UUID scheduleId
   ) {
-    return ProductPlanResponse.from(
-        productQueryService.getProduct(productId)
+    return ProductScheduleInfoResponse.from(
+        productSearchService.getSchedule(scheduleId)
     );
   }
 
