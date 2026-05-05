@@ -2,7 +2,6 @@ package com.yeoljeong.tripmate.product.presentation.controller.internal;
 
 import com.yeoljeong.tripmate.product.application.service.query.ProductQueryService;
 import com.yeoljeong.tripmate.product.application.service.query.ProductSearchService;
-import com.yeoljeong.tripmate.product.presentation.dto.response.ProductPlanResponse;
 import com.yeoljeong.tripmate.product.presentation.dto.response.ProductScheduleInfoResponse;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
