@@ -55,7 +55,7 @@ public class ProductScheduleCommandService {
     validateCompany(company, createdBy);
 
     List<ProductSchedule> schedules =
-        createSchedulesByDateRange(product, command);
+        createSchedulesByDateRange(product.getId(), command);
 
     saveSchedules(schedules);
 
@@ -129,7 +129,7 @@ public class ProductScheduleCommandService {
 
   // 날짜 범위 기반 스케줄 생성 (startDate ~ endDate까지 하루 단위로 생성)
   private List<ProductSchedule> createSchedulesByDateRange(
-      Product product,
+      UUID productId,
       CreateProductScheduleCommand command
   ) {
 
@@ -140,7 +140,7 @@ public class ProductScheduleCommandService {
 
     // startDate부터 endDate까지 하루씩 증가하며 스케줄 생성
     while (!current.isAfter(command.getEndDate())) {
-      schedules.add(ProductSchedule.create(product, current, command.getStock()));
+      schedules.add(ProductSchedule.create(productId, current, command.getStock()));
       current = current.plusDays(1); // 다음 날짜로 이동
     }
 
