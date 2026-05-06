@@ -1,5 +1,6 @@
 package com.yeoljeong.tripmate.product.application.dto.result;
 
+import com.yeoljeong.tripmate.product.domain.model.Product;
 import com.yeoljeong.tripmate.product.domain.model.ProductSchedule;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -30,15 +31,15 @@ public record ProductScheduleInfoResult(
     String scheduleStatus
 ) {
 
-  public static ProductScheduleInfoResult from(ProductSchedule schedule) {
+  public static ProductScheduleInfoResult from(Product product, ProductSchedule schedule) {
     return new ProductScheduleInfoResult(
-        schedule.getProduct().getId(),
-        schedule.getProduct().getProductName(),
-        schedule.getProduct().getAddress().getCountry().name(),
-        schedule.getProduct().getAddress().getState(),
-        schedule.getProduct().getAddress().getCity(),
-        schedule.getProduct().getPrice(),
-        schedule.getProduct().getStatus().name(),
+        product.getId(),
+        product.getProductName(),
+        product.getAddress().getCountry().name(),
+        product.getAddress().getState(),
+        product.getAddress().getCity(),
+        product.getPrice(),
+        product.getStatus().name(),
         schedule.getId(),
         schedule.getDate(),
         schedule.getStock(),

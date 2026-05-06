@@ -7,12 +7,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDate;
@@ -36,9 +33,8 @@ public class ProductSchedule {
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "product_id", nullable = false)
-  private Product product;
+  @Column(name = "product_id", nullable = false)
+  private UUID productId;
 
   @Column(nullable = false)
   private LocalDate date;
@@ -52,11 +48,11 @@ public class ProductSchedule {
 
   @Builder(access = AccessLevel.PRIVATE)
   private ProductSchedule(
-      Product product,
+      UUID productId,
       LocalDate date,
       int stock
   ) {
-    this.product = validateProduct(product);
+    this.productId = validateProductId(productId);
     this.date = validateDate(date);
     this.stock = validateStock(stock);
     this.status = ScheduleStatus.ACTIVE;
@@ -64,23 +60,23 @@ public class ProductSchedule {
 
   //상품이랑 동시에 생성 되는게 아니라 따로도 만드니까 public
   public static ProductSchedule create(
-      Product product,
+      UUID productId,
       LocalDate date,
       int stock
   ) {
     return ProductSchedule.builder()
-        .product(product)
+        .productId(productId)
         .date(date)
         .stock(stock)
         .build();
   }
 
   // ProductSchedule은 반드시 상품에 속해야 하므로 null을 허용하지 않음
-  private static Product validateProduct(Product product) {
-    if (product == null) {
+  private static UUID  validateProductId(UUID productId) {
+    if (productId == null) {
       throw new BusinessException(ProductErrorCode.INVALID_PRODUCT);
     }
-    return product;
+    return productId;
   }
 
   // 날짜 유효성 검증 (필수 값 체크)
