@@ -45,11 +45,10 @@ public interface ProductScheduleJpaRepository
    // 특정 날짜 예약 가능한 스케줄 조회
    // - status = ACTIVE
    // - stock > 0 인 경우만 조회
-   // - N+1 방지를 위해 product fetch join 사용
+   // - N+1 문제
   @Query("""
       SELECT s
       FROM ProductSchedule s
-      JOIN FETCH s.product p
       WHERE s.date = :date
       AND s.status = com.yeoljeong.tripmate.product.domain.enums.ScheduleStatus.ACTIVE
       AND s.stock > 0
