@@ -45,7 +45,6 @@ public interface ProductScheduleJpaRepository
    // 특정 날짜 예약 가능한 스케줄 조회
    // - status = ACTIVE
    // - stock > 0 인 경우만 조회
-   // - N+1 문제
   @Query("""
       SELECT s
       FROM ProductSchedule s

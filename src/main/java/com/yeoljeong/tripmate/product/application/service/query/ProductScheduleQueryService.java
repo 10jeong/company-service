@@ -8,6 +8,9 @@ import com.yeoljeong.tripmate.product.domain.model.Product;
 import com.yeoljeong.tripmate.product.domain.model.ProductSchedule;
 import com.yeoljeong.tripmate.product.domain.repository.ProductRepository;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.transaction.annotation.Transactional;
 import com.yeoljeong.tripmate.product.domain.repository.ProductScheduleRepository;
 import java.util.UUID;
@@ -45,11 +48,17 @@ public class ProductScheduleQueryService {
       LocalDate date,
       Pageable pageable
   ) {
-    return scheduleRepository.findAvailableSchedulesByDate(date, pageable)
-        .map(schedule -> {
-          Product product = findProduct(schedule.getProductId());
-          return ProductScheduleInfoResult.from(product, schedule);
-        });
+    // 1. 날짜 기준 예약 가능한 스케줄 목록 조회
+    Slice<ProductSchedule> schedules =
+        scheduleRepository.findAvailableSchedulesByDate(date, pageable);
+
+    // 2. 스케줄에 연관된 상품을 한번에 조회 (N+1 방지)
+    Map<UUID, Product> productMap = getProductMap(schedules.getContent());
+
+    // 3. 스케줄 + 상품 정보 조합해서 반환
+    return schedules.map(schedule ->
+        ProductScheduleInfoResult.from(productMap.get(schedule.getProductId()), schedule)
+    );
   }
 
   //(내부통신용) 주문시 사용 하는 상품,스케줄 정보
@@ -77,6 +86,23 @@ public class ProductScheduleQueryService {
   private Product findProduct(UUID productId) {
     return productRepository.findById(productId)
         .orElseThrow(() -> new BusinessException(ProductErrorCode.PRODUCT_NOT_FOUND));
+  }
+
+  /**메서드**/
+// 스케줄 목록에서 productId 추출 후 상품 한번에 조회
+// - 스케줄마다 개별 조회(N+1) 대신 in절로 한번에 조회
+  private Map<UUID, Product> getProductMap(List<ProductSchedule> schedules) {
+    // 1. 스케줄 목록에서 productId만 추출
+    List<UUID> productIds = schedules.stream()
+        .map(ProductSchedule::getProductId)
+        .toList();
+
+    // 2. productId 목록으로 상품 한번에 조회 (WHERE id IN (...))
+    List<Product> products = productRepository.findAllById(productIds);
+
+    // 3. productId를 key, Product를 value로 Map 변환 (빠른 탐색을 위해)
+    return products.stream()
+        .collect(Collectors.toMap(Product::getId, p -> p));
   }
 
 }

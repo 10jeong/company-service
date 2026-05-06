@@ -3,6 +3,7 @@ package com.yeoljeong.tripmate.product.infrastructure.persistence.repositoryImpl
 import com.yeoljeong.tripmate.product.domain.model.Product;
 import com.yeoljeong.tripmate.product.domain.repository.ProductRepository;
 import com.yeoljeong.tripmate.product.infrastructure.persistence.jpa.ProductJpaRepository;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -32,5 +33,11 @@ public class ProductRepositoryImpl implements ProductRepository {
   @Override
   public Slice<Product> findAll(Pageable pageable) {
     return productJpaRepository.findAllBy(pageable);
+  }
+
+  // 상품 목록 조회 (in절, N+1 방지용)
+  @Override
+  public List<Product> findAllById(List<UUID> ids) {
+    return productJpaRepository.findAllById(ids);
   }
 }
