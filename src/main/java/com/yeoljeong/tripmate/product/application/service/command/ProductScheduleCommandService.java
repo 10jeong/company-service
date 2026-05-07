@@ -63,7 +63,7 @@ public class ProductScheduleCommandService {
     saveSchedules(schedules);
 
     // 생성 결과 반환
-    return ProductScheduleCommandResult.of(
+    return new ProductScheduleCommandResult(
         product.getId(),
         schedules.size(),
         command.getStartDate(),
@@ -90,6 +90,7 @@ public class ProductScheduleCommandService {
               quantity
           )
       );
+      //트랜잭션 롤백 발생
       throw e;
     }
   }

@@ -12,13 +12,4 @@ public record ProductScheduleCommandResult(
     int createdCount,
     LocalDate startDate,
     LocalDate endDate
-) {
-  public static ProductScheduleCommandResult of(
-      UUID productId,
-      int count,
-      LocalDate startDate,
-      LocalDate endDate
-  ) {
-    return new ProductScheduleCommandResult(productId, count, startDate, endDate);
-  }
-}
+) {}

@@ -13,6 +13,10 @@ public class ProductStockDeductFailedEventHandler {
 
   private final ProductStockDeductFailedPublisher publisher;
 
+  /** AFTER_ROLLBACK
+   * → 트랜잭션 롤백된 후 실행
+   * → 재고 차감 실패 → 롤백 → 보상 이벤트 발행
+   * */
   @TransactionalEventListener(phase = TransactionPhase.AFTER_ROLLBACK)
   public void handle(ProductStockDeductFailedEvent event) {
     publisher.publish(event);
