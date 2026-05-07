@@ -10,6 +10,7 @@ import com.yeoljeong.tripmate.product.domain.model.Product;
 import com.yeoljeong.tripmate.product.domain.model.ProductSchedule;
 import com.yeoljeong.tripmate.product.domain.repository.ProductRepository;
 import com.yeoljeong.tripmate.product.domain.repository.ProductScheduleRepository;
+import com.yeoljeong.tripmate.product.infrastructure.messaging.producer.ProductStockDeductFailedEvent;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,7 @@ public class ProductScheduleCommandService {
   private final ProductRepository productRepository;
   private final ProductScheduleRepository scheduleRepository;
   private final CompanyClient companyClient;
+  private final ApplicationEventPublisher applicationEventPublisher;
 
   //상품 스케줄 일괄 생성
 
@@ -60,7 +63,7 @@ public class ProductScheduleCommandService {
     saveSchedules(schedules);
 
     // 생성 결과 반환
-    return ProductScheduleCommandResult.of(
+    return new ProductScheduleCommandResult(
         product.getId(),
         schedules.size(),
         command.getStartDate(),
@@ -75,7 +78,21 @@ public class ProductScheduleCommandService {
         .findByIdAndProductId(scheduleId, productId)
         .orElseThrow(() -> new BusinessException(ProductErrorCode.SCHEDULE_NOT_FOUND));
 
-    schedule.decreaseStock(quantity);
+    try {
+      schedule.decreaseStock(quantity);
+    } catch (BusinessException e) {
+      // 재고 차감 실패 시 보상 이벤트 발행
+      applicationEventPublisher.publishEvent(
+          new ProductStockDeductFailedEvent(
+              UUID.randomUUID(),
+              productId,
+              scheduleId,
+              quantity
+          )
+      );
+      //트랜잭션 롤백 발생
+      throw e;
+    }
   }
 
 
