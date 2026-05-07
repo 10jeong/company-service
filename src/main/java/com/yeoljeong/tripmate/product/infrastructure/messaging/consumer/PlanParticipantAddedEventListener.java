@@ -1,4 +1,4 @@
-package com.yeoljeong.tripmate.product.infrastructure.messaging;
+package com.yeoljeong.tripmate.product.infrastructure.messaging.consumer;
 
 import com.yeoljeong.tripmate.event.PlanUnitParticipantAddedEvent;
 import com.yeoljeong.tripmate.event.enums.PlanTopic;

@@ -4,14 +4,13 @@ import com.yeoljeong.tripmate.company.presentation.dto.response.CompanyResponse;
 import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.product.application.dto.command.CreateProductScheduleCommand;
 import com.yeoljeong.tripmate.product.application.dto.result.ProductScheduleCommandResult;
-import com.yeoljeong.tripmate.product.application.port.StockDeductFailedPublisher;
 import com.yeoljeong.tripmate.product.application.service.client.CompanyClient;
 import com.yeoljeong.tripmate.product.domain.exception.ProductErrorCode;
 import com.yeoljeong.tripmate.product.domain.model.Product;
 import com.yeoljeong.tripmate.product.domain.model.ProductSchedule;
 import com.yeoljeong.tripmate.product.domain.repository.ProductRepository;
 import com.yeoljeong.tripmate.product.domain.repository.ProductScheduleRepository;
-import com.yeoljeong.tripmate.product.infrastructure.messaging.StockDeductFailedEvent;
+import com.yeoljeong.tripmate.product.infrastructure.messaging.producer.ProductStockDeductFailedEvent;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -19,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +30,7 @@ public class ProductScheduleCommandService {
   private final ProductRepository productRepository;
   private final ProductScheduleRepository scheduleRepository;
   private final CompanyClient companyClient;
-  private final StockDeductFailedPublisher stockDeductFailedPublisher;
+  private final ApplicationEventPublisher applicationEventPublisher;
 
   //상품 스케줄 일괄 생성
 
@@ -82,8 +82,8 @@ public class ProductScheduleCommandService {
       schedule.decreaseStock(quantity);
     } catch (BusinessException e) {
       // 재고 차감 실패 시 보상 이벤트 발행
-      stockDeductFailedPublisher.publish(
-          new StockDeductFailedEvent(
+      applicationEventPublisher.publishEvent(
+          new ProductStockDeductFailedEvent(
               UUID.randomUUID(),
               productId,
               scheduleId,
