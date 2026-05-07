@@ -4,12 +4,14 @@ import com.yeoljeong.tripmate.company.presentation.dto.response.CompanyResponse;
 import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.product.application.dto.command.CreateProductScheduleCommand;
 import com.yeoljeong.tripmate.product.application.dto.result.ProductScheduleCommandResult;
+import com.yeoljeong.tripmate.product.application.port.StockDeductFailedPublisher;
 import com.yeoljeong.tripmate.product.application.service.client.CompanyClient;
 import com.yeoljeong.tripmate.product.domain.exception.ProductErrorCode;
 import com.yeoljeong.tripmate.product.domain.model.Product;
 import com.yeoljeong.tripmate.product.domain.model.ProductSchedule;
 import com.yeoljeong.tripmate.product.domain.repository.ProductRepository;
 import com.yeoljeong.tripmate.product.domain.repository.ProductScheduleRepository;
+import com.yeoljeong.tripmate.product.infrastructure.messaging.StockDeductFailedEvent;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -28,6 +30,7 @@ public class ProductScheduleCommandService {
   private final ProductRepository productRepository;
   private final ProductScheduleRepository scheduleRepository;
   private final CompanyClient companyClient;
+  private final StockDeductFailedPublisher stockDeductFailedPublisher;
 
   //상품 스케줄 일괄 생성
 
@@ -75,7 +78,20 @@ public class ProductScheduleCommandService {
         .findByIdAndProductId(scheduleId, productId)
         .orElseThrow(() -> new BusinessException(ProductErrorCode.SCHEDULE_NOT_FOUND));
 
-    schedule.decreaseStock(quantity);
+    try {
+      schedule.decreaseStock(quantity);
+    } catch (BusinessException e) {
+      // 재고 차감 실패 시 보상 이벤트 발행
+      stockDeductFailedPublisher.publish(
+          new StockDeductFailedEvent(
+              UUID.randomUUID(),
+              productId,
+              scheduleId,
+              quantity
+          )
+      );
+      throw e;
+    }
   }
 
 
