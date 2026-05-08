@@ -1,5 +1,6 @@
 package com.yeoljeong.tripmate.product.application.service.command;
 
+
 import com.yeoljeong.tripmate.company.presentation.dto.response.CompanyResponse;
 import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.product.application.dto.command.CreateProductScheduleCommand;
@@ -10,7 +11,7 @@ import com.yeoljeong.tripmate.product.domain.model.Product;
 import com.yeoljeong.tripmate.product.domain.model.ProductSchedule;
 import com.yeoljeong.tripmate.product.domain.repository.ProductRepository;
 import com.yeoljeong.tripmate.product.domain.repository.ProductScheduleRepository;
-import com.yeoljeong.tripmate.product.infrastructure.messaging.producer.ProductStockDeductFailedEvent;
+import com.yeoljeong.tripmate.product.infrastructure.outbox.ProductStockEventPort;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -18,11 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProductScheduleCommandService {
@@ -30,8 +31,7 @@ public class ProductScheduleCommandService {
   private final ProductRepository productRepository;
   private final ProductScheduleRepository scheduleRepository;
   private final CompanyClient companyClient;
-  private final ApplicationEventPublisher applicationEventPublisher;
-
+  private final ProductStockEventPort stockEventPort;
   //상품 스케줄 일괄 생성
 
   /**
@@ -82,15 +82,9 @@ public class ProductScheduleCommandService {
       schedule.decreaseStock(quantity);
     } catch (BusinessException e) {
       // 재고 차감 실패 시 보상 이벤트 발행
-      applicationEventPublisher.publishEvent(
-          new ProductStockDeductFailedEvent(
-              UUID.randomUUID(),
-              productId,
-              scheduleId,
-              quantity
-          )
-      );
-      //트랜잭션 롤백 발생
+      // REQUIRES_NEW로 별도 트랜잭션으로 저장
+      stockEventPort.save(productId, scheduleId, quantity);
+      //트랜잭션 롤백
       throw e;
     }
   }
