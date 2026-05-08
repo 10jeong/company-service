@@ -38,8 +38,7 @@ public class ProductStockEventPortAdapter implements ProductStockEventPort {
           ProductOutbox.create(ProductTopic.STOCK_DEDUCT_FAILED_TOPIC, payload)
       );
     } catch (JsonProcessingException ex) {
-      throw new RuntimeException("보상 이벤트 직렬화 실패 - planUnitId="
-          + planUnitId + ", userId=" + userId, ex);
+      throw new RuntimeException("보상 이벤트 직렬화 실패", ex);
     }
   }
 }

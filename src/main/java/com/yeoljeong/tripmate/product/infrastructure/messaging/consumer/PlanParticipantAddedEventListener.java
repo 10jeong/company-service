@@ -45,11 +45,12 @@ public class PlanParticipantAddedEventListener {
 
       // TODO: 멱등성 처리 추가 예정 (ProcessedEvent 테이블로 중복 방지)
 
-    } catch (Exception e) {
-      log.error("이벤트 역직렬화 실패 - message={}", message, e);
-    }
+      // 성공 시에만 offset 커밋
+      ack.acknowledge();
 
-    // offset 커밋
-    ack.acknowledge();
+    } catch (Exception e) {
+      log.error("PlanUnitParticipantAddedEvent 처리 실패", e);
+      throw new RuntimeException(e); //
+    }
   }
 }
