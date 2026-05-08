@@ -14,7 +14,7 @@ import com.yeoljeong.tripmate.product.domain.repository.ProductRepository;
 import com.yeoljeong.tripmate.product.domain.repository.ProductScheduleRepository;
 import com.yeoljeong.tripmate.product.infrastructure.messaging.producer.ProductStockDeductFailedEvent;
 import com.yeoljeong.tripmate.product.infrastructure.messaging.producer.ProductTopic;
-import com.yeoljeong.tripmate.product.infrastructure.outbox.ProductOutboxSaver;
+import com.yeoljeong.tripmate.product.infrastructure.outbox.ProductStockEventPort;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -34,7 +34,7 @@ public class ProductScheduleCommandService {
   private final ProductRepository productRepository;
   private final ProductScheduleRepository scheduleRepository;
   private final CompanyClient companyClient;
-  private final ProductOutboxSaver outboxSaver;
+  private final ProductStockEventPort outboxSaver;
   private final ObjectMapper objectMapper;
 
   //상품 스케줄 일괄 생성

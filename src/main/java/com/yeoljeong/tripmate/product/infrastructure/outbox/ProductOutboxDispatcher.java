@@ -2,7 +2,7 @@ package com.yeoljeong.tripmate.product.infrastructure.outbox;
 
 import com.yeoljeong.tripmate.domain.constants.OutboxStatus;
 import com.yeoljeong.tripmate.product.domain.outbox.ProductOutbox;
-import com.yeoljeong.tripmate.product.domain.repository.ProductOutboxRepository;
+import com.yeoljeong.tripmate.product.infrastructure.persistence.jpa.ProductOutboxJpaRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ProductOutboxDispatcher {
 
-  private final ProductOutboxRepository productOutboxRepository;
+  private final ProductOutboxJpaRepository productOutboxJpaRepository;
   private final KafkaTemplate<String, String> kafkaTemplate;
 
   // 1초마다 자동 실행
@@ -25,7 +25,7 @@ public class ProductOutboxDispatcher {
   public void dispatch() {
     // DB에서 PENDING인 것들 꺼내서 Kafka로 발행
     List<ProductOutbox> pendingEvents =
-        productOutboxRepository.findAllByStatus(OutboxStatus.PENDING);
+        productOutboxJpaRepository.findAllByStatus(OutboxStatus.PENDING);
 
     pendingEvents.forEach(outbox -> {
       //성공 시 PUBLISHED로 변경
