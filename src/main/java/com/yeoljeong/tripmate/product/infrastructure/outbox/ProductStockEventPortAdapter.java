@@ -2,6 +2,7 @@ package com.yeoljeong.tripmate.product.infrastructure.outbox;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yeoljeong.tripmate.product.application.port.ProductStockEventPort;
 import com.yeoljeong.tripmate.product.domain.outbox.ProductOutbox;
 import com.yeoljeong.tripmate.product.infrastructure.messaging.producer.ProductStockDeductFailedEvent;
 import com.yeoljeong.tripmate.product.infrastructure.messaging.producer.ProductTopic;
@@ -14,7 +15,7 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-public class ProductStockEventPort {
+public class ProductStockEventPortAdapter implements ProductStockEventPort {
 
   private final ObjectMapper objectMapper;
   private final ProductOutboxJpaRepository productOutboxJpaRepository;
