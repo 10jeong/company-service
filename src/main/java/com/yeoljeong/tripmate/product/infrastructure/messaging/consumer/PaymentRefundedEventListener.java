@@ -3,6 +3,7 @@ package com.yeoljeong.tripmate.product.infrastructure.messaging.consumer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yeoljeong.tripmate.event.PaymentRefundedEvent;
 import com.yeoljeong.tripmate.event.enums.PaymentTopic;
+import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.product.application.service.command.ProductScheduleCommandService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,11 +42,18 @@ public class PaymentRefundedEventListener {
           event.quantity()
       );
 
+      // TODO: 멱등성 처리 추가 예정
+
       // 성공 시에만 offset 커밋
       ack.acknowledge();
 
+    } catch (BusinessException e) {
+      // 비즈니스 예외는 재시도 불필요 → ack하고 넘어감
+      log.warn("[PaymentRefundedListener] 비즈니스 예외 - error: {}", e.getMessage());
+      ack.acknowledge();
     } catch (Exception e) {
-      log.error("PaymentRefundedEvent 처리 실패", e);
+      // 시스템 예외는 재시도
+      log.error("[PaymentRefundedListener] 처리 실패", e);
       throw new RuntimeException(e);
     }
   }
