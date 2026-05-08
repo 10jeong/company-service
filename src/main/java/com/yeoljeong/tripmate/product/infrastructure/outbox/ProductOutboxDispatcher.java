@@ -3,10 +3,11 @@ package com.yeoljeong.tripmate.product.infrastructure.outbox;
 import com.yeoljeong.tripmate.domain.constants.OutboxStatus;
 import com.yeoljeong.tripmate.product.domain.outbox.ProductOutbox;
 import com.yeoljeong.tripmate.product.infrastructure.persistence.jpa.ProductOutboxJpaRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -25,7 +26,9 @@ public class ProductOutboxDispatcher {
   public void dispatch() {
     // DB에서 PENDING인 것들 꺼내서 Kafka로 발행
     List<ProductOutbox> pendingEvents =
-        productOutboxJpaRepository.findAllByStatus(OutboxStatus.PENDING);
+        productOutboxJpaRepository.findAllByStatus(
+            OutboxStatus.PENDING,
+            PageRequest.of(0, 100));
 
     pendingEvents.forEach(outbox -> {
       //성공 시 PUBLISHED로 변경
