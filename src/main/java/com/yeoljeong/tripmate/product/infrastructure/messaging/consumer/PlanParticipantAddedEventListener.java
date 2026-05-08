@@ -38,6 +38,8 @@ public class PlanParticipantAddedEventListener {
       productScheduleCommandService.deductStock(
           event.productId(),
           event.scheduleId(),
+          event.planUnitId(),
+          event.userId(),
           event.quantity()
       );
 

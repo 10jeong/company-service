@@ -73,7 +73,7 @@ public class ProductScheduleCommandService {
 
   //재고 차감
   @Transactional
-  public void deductStock(UUID productId, UUID scheduleId, int quantity) {
+  public void deductStock(UUID productId, UUID scheduleId, UUID planUnitId, UUID userId, int quantity) { // ← 추가
     ProductSchedule schedule = scheduleRepository
         .findByIdAndProductId(scheduleId, productId)
         .orElseThrow(() -> new BusinessException(ProductErrorCode.SCHEDULE_NOT_FOUND));
@@ -83,7 +83,7 @@ public class ProductScheduleCommandService {
     } catch (BusinessException e) {
       // 재고 차감 실패 시 보상 이벤트 발행
       // REQUIRES_NEW로 별도 트랜잭션으로 저장
-      stockEventPort.save(productId, scheduleId, quantity);
+      stockEventPort.save(planUnitId, userId, quantity); // ← 변경
       //트랜잭션 롤백
       throw e;
     }
