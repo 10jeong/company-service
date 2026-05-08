@@ -1,7 +1,6 @@
 package com.yeoljeong.tripmate.product.application.service.command;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.yeoljeong.tripmate.company.presentation.dto.response.CompanyResponse;
 import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.product.application.dto.command.CreateProductScheduleCommand;
@@ -12,8 +11,6 @@ import com.yeoljeong.tripmate.product.domain.model.Product;
 import com.yeoljeong.tripmate.product.domain.model.ProductSchedule;
 import com.yeoljeong.tripmate.product.domain.repository.ProductRepository;
 import com.yeoljeong.tripmate.product.domain.repository.ProductScheduleRepository;
-import com.yeoljeong.tripmate.product.infrastructure.messaging.producer.ProductStockDeductFailedEvent;
-import com.yeoljeong.tripmate.product.infrastructure.messaging.producer.ProductTopic;
 import com.yeoljeong.tripmate.product.infrastructure.outbox.ProductStockEventPort;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
@@ -34,9 +31,7 @@ public class ProductScheduleCommandService {
   private final ProductRepository productRepository;
   private final ProductScheduleRepository scheduleRepository;
   private final CompanyClient companyClient;
-  private final ProductStockEventPort outboxSaver;
-  private final ObjectMapper objectMapper;
-
+  private final ProductStockEventPort stockEventPort;
   //상품 스케줄 일괄 생성
 
   /**
@@ -87,23 +82,8 @@ public class ProductScheduleCommandService {
       schedule.decreaseStock(quantity);
     } catch (BusinessException e) {
       // 재고 차감 실패 시 보상 이벤트 발행
-      try {
-        String payload = objectMapper.writeValueAsString(
-            new ProductStockDeductFailedEvent(
-                UUID.randomUUID(),
-                productId,
-                scheduleId,
-                quantity
-            )
-        );
-        // outboxSaver는 REQUIRES_NEW로 별도 트랜잭션
-        outboxSaver.save(ProductTopic.STOCK_DEDUCT_FAILED_TOPIC, payload);
-      }
-      // JSON 변환이 실패한 경우
-      catch (JsonProcessingException ex) {
-        log.error("이벤트 직렬화 실패 - productId={}, scheduleId={}",
-            productId, scheduleId, ex);
-      }
+      // REQUIRES_NEW로 별도 트랜잭션으로 저장
+      stockEventPort.save(productId, scheduleId, quantity);
       //트랜잭션 롤백
       throw e;
     }
