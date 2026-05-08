@@ -89,6 +89,16 @@ public class ProductScheduleCommandService {
     }
   }
 
+  // 재고 추가
+  @Transactional
+  public void increaseStock(UUID productId, UUID scheduleId, int quantity) {
+    ProductSchedule schedule = scheduleRepository
+        .findByIdAndProductId(scheduleId, productId)
+        .orElseThrow(() -> new BusinessException(ProductErrorCode.SCHEDULE_NOT_FOUND));
+
+    schedule.increaseStock(quantity);
+  }
+
 
   /** 메서드 **/
   //상품 존재 여부 확인
