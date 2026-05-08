@@ -1,4 +1,4 @@
-package com.yeoljeong.tripmate.product.domain.outbox;
+package com.yeoljeong.tripmate.product.infrastructure.outbox;
 
 import com.yeoljeong.tripmate.domain.Outbox;
 import jakarta.persistence.Entity;
