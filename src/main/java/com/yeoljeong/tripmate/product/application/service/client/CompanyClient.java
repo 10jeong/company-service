@@ -1,9 +1,8 @@
 package com.yeoljeong.tripmate.product.application.service.client;
 
-import com.yeoljeong.tripmate.company.presentation.dto.response.CompanyResponse;
+import com.yeoljeong.tripmate.product.infrastructure.external.dto.CompanyClientResponse;
 import java.util.UUID;
 
 public interface CompanyClient {
-
-  CompanyResponse getCompany(UUID companyId);
+  CompanyClientResponse getCompany(UUID companyId);
 }

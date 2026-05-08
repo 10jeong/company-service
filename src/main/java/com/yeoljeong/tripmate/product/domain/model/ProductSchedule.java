@@ -112,6 +112,18 @@ public class ProductSchedule {
     this.stock -= quantity;
   }
 
+  // 재고 추가 (유효성 검증 포함)
+  public void increaseStock(int quantity) {
+
+    // 추가 수량은 1 이상이어야 함
+    if (quantity <= 0) {
+      throw new BusinessException(ProductErrorCode.INVALID_QUANTITY);
+    }
+
+    // 재고 추가
+    this.stock += quantity;
+  }
+
   // 일정 상태를 CLOSED로 변경 (판매 종료)
   public void close() {
     if (this.status == ScheduleStatus.CLOSED) {

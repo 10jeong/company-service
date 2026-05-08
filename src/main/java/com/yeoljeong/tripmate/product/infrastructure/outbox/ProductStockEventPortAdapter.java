@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yeoljeong.tripmate.event.ProductStockDeductFailedEvent;
 import com.yeoljeong.tripmate.event.enums.ProductTopic;
 import com.yeoljeong.tripmate.product.application.port.ProductStockEventPort;
-import com.yeoljeong.tripmate.product.domain.outbox.ProductOutbox;
 import com.yeoljeong.tripmate.product.infrastructure.persistence.jpa.ProductOutboxJpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
