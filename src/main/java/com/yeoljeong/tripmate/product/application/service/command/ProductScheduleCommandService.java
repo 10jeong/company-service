@@ -5,13 +5,13 @@ import com.yeoljeong.tripmate.company.presentation.dto.response.CompanyResponse;
 import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.product.application.dto.command.CreateProductScheduleCommand;
 import com.yeoljeong.tripmate.product.application.dto.result.ProductScheduleCommandResult;
+import com.yeoljeong.tripmate.product.application.port.ProductStockEventPort;
 import com.yeoljeong.tripmate.product.application.service.client.CompanyClient;
 import com.yeoljeong.tripmate.product.domain.exception.ProductErrorCode;
 import com.yeoljeong.tripmate.product.domain.model.Product;
 import com.yeoljeong.tripmate.product.domain.model.ProductSchedule;
 import com.yeoljeong.tripmate.product.domain.repository.ProductRepository;
 import com.yeoljeong.tripmate.product.domain.repository.ProductScheduleRepository;
-import com.yeoljeong.tripmate.product.infrastructure.outbox.ProductStockEventPort;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -73,7 +73,7 @@ public class ProductScheduleCommandService {
 
   //재고 차감
   @Transactional
-  public void deductStock(UUID productId, UUID scheduleId, int quantity) {
+  public void deductStock(UUID productId, UUID scheduleId, UUID planUnitId, UUID userId, int quantity) { // ← 추가
     ProductSchedule schedule = scheduleRepository
         .findByIdAndProductId(scheduleId, productId)
         .orElseThrow(() -> new BusinessException(ProductErrorCode.SCHEDULE_NOT_FOUND));
@@ -83,7 +83,7 @@ public class ProductScheduleCommandService {
     } catch (BusinessException e) {
       // 재고 차감 실패 시 보상 이벤트 발행
       // REQUIRES_NEW로 별도 트랜잭션으로 저장
-      stockEventPort.save(productId, scheduleId, quantity);
+      stockEventPort.save(planUnitId, userId, quantity); // ← 변경
       //트랜잭션 롤백
       throw e;
     }

@@ -40,10 +40,12 @@ spring:
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
+jwt:
+  internal-secret: ${JWT_INTERNAL_SECRET}
+
 server:
   #port: 0
   port: 8081
-
 
 ##로컬용
 #eureka:
