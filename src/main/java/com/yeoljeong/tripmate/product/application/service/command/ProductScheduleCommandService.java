@@ -1,7 +1,7 @@
 package com.yeoljeong.tripmate.product.application.service.command;
 
 
-import com.yeoljeong.tripmate.company.presentation.dto.response.CompanyResponse;
+
 import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.product.application.dto.command.CreateProductScheduleCommand;
 import com.yeoljeong.tripmate.product.application.dto.result.ProductScheduleCommandResult;
@@ -12,6 +12,7 @@ import com.yeoljeong.tripmate.product.domain.model.Product;
 import com.yeoljeong.tripmate.product.domain.model.ProductSchedule;
 import com.yeoljeong.tripmate.product.domain.repository.ProductRepository;
 import com.yeoljeong.tripmate.product.domain.repository.ProductScheduleRepository;
+import com.yeoljeong.tripmate.product.infrastructure.external.dto.CompanyClientResponse;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -52,10 +53,10 @@ public class ProductScheduleCommandService {
 
     Product product = findProduct(command.getProductId());
 
-    CompanyResponse company =
+    CompanyClientResponse company =
         companyClient.getCompany(product.getCompanyId());
 
-    validateCompany(company, createdBy);
+    validateCompany(company.createdBy(), company.active(), createdBy);
 
     List<ProductSchedule> schedules =
         createSchedulesByDateRange(product.getId(), command);
@@ -109,17 +110,18 @@ public class ProductScheduleCommandService {
 
   // 업체 검증
   private void validateCompany(
-      CompanyResponse company,
+      UUID companyCreatedBy,
+      boolean isActive,
       UUID createdBy
   ) {
 
     // 현재 로그인한 사용자가 업체 생성자인지 검증
-    if (!company.createdBy().equals(createdBy)) {
+    if (!companyCreatedBy.equals(createdBy)) {
       throw new BusinessException(ProductErrorCode.UNAUTHORIZED_COMPANY_ACCESS);
     }
 
     // 업체 활성 상태 검증
-    if (!company.isActive()) {
+    if (!isActive) {
       throw new BusinessException(ProductErrorCode.INVALID_COMPANY_STATUS);
     }
   }
@@ -172,7 +174,7 @@ public class ProductScheduleCommandService {
   private void saveSchedules(List<ProductSchedule> schedules) {
     try {
       scheduleRepository.saveAll(schedules);
-      scheduleRepository.flush(); //추가: flush 해야 예외를 여기서 잡을 수 있음
+      scheduleRepository.flush(); //flush 해야 예외를 여기서 잡을 수 있음
     } catch (DataIntegrityViolationException e) {
       //(product_id + date) UNIQUE 제약 위반 시 예외 변환
       throw new BusinessException(ProductErrorCode.SCHEDULE_ALREADY_EXISTS);
