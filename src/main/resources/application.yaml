@@ -9,7 +9,7 @@ spring:
 
     consumer:
       group-id: company-service
-      auto-offset-reset: latest
+      auto-offset-reset: earliest
       enable-auto-commit: false
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
