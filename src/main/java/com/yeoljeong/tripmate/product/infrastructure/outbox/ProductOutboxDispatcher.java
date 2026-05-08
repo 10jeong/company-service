@@ -30,7 +30,9 @@ public class ProductOutboxDispatcher {
     pendingEvents.forEach(outbox -> {
       //성공 시 PUBLISHED로 변경
       try {
-        kafkaTemplate.send(outbox.getTopic(), outbox.getPayload());
+        // 전송 완료될 때까지 기다림
+        kafkaTemplate.send(outbox.getTopic(), outbox.getPayload()).get();
+        // 전송 성공 확인 후 PUBLISHED
         outbox.published();
 
         //실패 시 retryCount++, 3회 초과 시 FAILED
