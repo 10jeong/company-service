@@ -9,23 +9,18 @@ spring:
 
     consumer:
       group-id: company-service
-      auto-offset-reset: earliest
+      auto-offset-reset: latest
       enable-auto-commit: false
-
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-
-      properties:
-        spring.json.trusted.packages: "com.yeoljeong.tripmate.*"
-        spring.json.use.type.headers: true
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
       properties:
-        spring.json.add.type.headers: true
-
+        acks: all
+        retries: 3
+        max.in.flight.requests.per.connection: 1
     listener:
       ack-mode: manual
       missing-topics-fatal: false
@@ -51,11 +46,11 @@ server:
 #eureka:
 #  client:
 #    service-url:
-#      #defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka}
+#      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka}
 #
 #  instance:
-#    #instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
-
+#    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
+#
 
 ###ngrok 테스트용
 eureka:
