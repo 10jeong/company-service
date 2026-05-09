@@ -22,11 +22,12 @@ public class ProductStockEventPortAdapter implements ProductStockEventPort {
   //REQUIRES_NEW로 deductStock 과 별도의 트랜잭션
   //deductStock 이 롤백 되어도 이 저장은 유지됨
   @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public void save(UUID planUnitId, UUID userId, int quantity) {
+  public void save(UUID planUnitId, UUID userId, UUID orderId, int quantity) {
     try {
       String payload = objectMapper.writeValueAsString(
           new ProductStockDeductFailedEvent(
               UUID.randomUUID(),
+              orderId,
               planUnitId,
               userId,
               quantity

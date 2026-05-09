@@ -41,6 +41,7 @@ public class PlanParticipantAddedEventListener {
           event.scheduleId(),
           event.planUnitId(),
           event.userId(),
+          event.orderId(),
           event.quantity()
       );
 
