@@ -2,7 +2,7 @@ package com.yeoljeong.tripmate.product.infrastructure.external;
 
 import com.yeoljeong.tripmate.company.presentation.dto.response.CompanyResponse;
 import com.yeoljeong.tripmate.exception.BusinessException;
-import com.yeoljeong.tripmate.product.application.service.client.CompanyClient;
+import com.yeoljeong.tripmate.product.application.client.CompanyClient;
 import com.yeoljeong.tripmate.product.domain.exception.ProductErrorCode;
 import com.yeoljeong.tripmate.product.infrastructure.external.dto.CompanyClientResponse;
 import java.util.UUID;

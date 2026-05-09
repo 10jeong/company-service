@@ -1,13 +1,14 @@
 package com.yeoljeong.tripmate.product.application.service.command;
 
-import com.yeoljeong.tripmate.company.presentation.dto.response.CompanyResponse;
 import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.product.application.dto.command.CreateProductCommand;
 import com.yeoljeong.tripmate.product.application.dto.result.ProductResult;
-import com.yeoljeong.tripmate.product.application.service.client.CompanyClient;
+import com.yeoljeong.tripmate.product.application.client.CompanyClient;
 import com.yeoljeong.tripmate.product.domain.exception.ProductErrorCode;
 import com.yeoljeong.tripmate.product.domain.model.Product;
 import com.yeoljeong.tripmate.product.domain.repository.ProductRepository;
+import com.yeoljeong.tripmate.product.infrastructure.external.dto.CompanyClientResponse;
+import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,33 +30,30 @@ public class ProductCommandService {
       CreateProductCommand command,
       UUID createdBy
   ) {
-
-    CompanyResponse company =
+    CompanyClientResponse company =
         companyClient.getCompany(command.getCompanyId());
 
-    validateCompany(company, createdBy);
+    validateCompany(company.createdBy(), company.active(), createdBy);
 
     Product product = command.toEntity();
-
     Product saved = productRepository.save(product);
-
     return ProductResult.from(saved);
   }
 
   /** 메서드 **/
   //업체 검증 메서드
   private void validateCompany(
-      CompanyResponse company,
+      UUID companyCreatedBy,
+      boolean isActive,
       UUID createdBy
   ) {
-
     // 현재 로그인한 사용자가 업체 생성자인지 검증(본인 업체만 상품 등록 가능)
-    if (!company.createdBy().equals(createdBy)) {
+    if (!Objects.equals(companyCreatedBy, createdBy)) {
       throw new BusinessException(ProductErrorCode.UNAUTHORIZED_COMPANY_ACCESS);
     }
 
     //업체 ACTIVE 상태인 업체만 상품 등록 가능
-    if (!company.isActive()) {
+    if (!isActive) {
       throw new BusinessException(ProductErrorCode.INVALID_COMPANY_STATUS);
     }
   }
