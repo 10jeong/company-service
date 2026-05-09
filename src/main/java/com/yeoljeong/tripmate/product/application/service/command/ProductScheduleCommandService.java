@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -116,7 +117,7 @@ public class ProductScheduleCommandService {
   ) {
 
     // 현재 로그인한 사용자가 업체 생성자인지 검증
-    if (!companyCreatedBy.equals(createdBy)) {
+    if (!Objects.equals(companyCreatedBy, createdBy)) {
       throw new BusinessException(ProductErrorCode.UNAUTHORIZED_COMPANY_ACCESS);
     }
 

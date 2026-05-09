@@ -8,6 +8,7 @@ import com.yeoljeong.tripmate.product.domain.exception.ProductErrorCode;
 import com.yeoljeong.tripmate.product.domain.model.Product;
 import com.yeoljeong.tripmate.product.domain.repository.ProductRepository;
 import com.yeoljeong.tripmate.product.infrastructure.external.dto.CompanyClientResponse;
+import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -47,7 +48,7 @@ public class ProductCommandService {
       UUID createdBy
   ) {
     // 현재 로그인한 사용자가 업체 생성자인지 검증(본인 업체만 상품 등록 가능)
-    if (!companyCreatedBy.equals(createdBy)) {
+    if (!Objects.equals(companyCreatedBy, createdBy)) {
       throw new BusinessException(ProductErrorCode.UNAUTHORIZED_COMPANY_ACCESS);
     }
 
