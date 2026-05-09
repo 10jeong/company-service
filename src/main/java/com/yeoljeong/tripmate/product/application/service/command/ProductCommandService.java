@@ -1,10 +1,9 @@
 package com.yeoljeong.tripmate.product.application.service.command;
 
-import com.yeoljeong.tripmate.company.presentation.dto.response.CompanyResponse;
 import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.product.application.dto.command.CreateProductCommand;
 import com.yeoljeong.tripmate.product.application.dto.result.ProductResult;
-import com.yeoljeong.tripmate.product.application.service.client.CompanyClient;
+import com.yeoljeong.tripmate.product.application.client.CompanyClient;
 import com.yeoljeong.tripmate.product.domain.exception.ProductErrorCode;
 import com.yeoljeong.tripmate.product.domain.model.Product;
 import com.yeoljeong.tripmate.product.domain.repository.ProductRepository;

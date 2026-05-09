@@ -6,7 +6,7 @@ import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.product.application.dto.command.CreateProductScheduleCommand;
 import com.yeoljeong.tripmate.product.application.dto.result.ProductScheduleCommandResult;
 import com.yeoljeong.tripmate.product.application.port.ProductStockEventPort;
-import com.yeoljeong.tripmate.product.application.service.client.CompanyClient;
+import com.yeoljeong.tripmate.product.application.client.CompanyClient;
 import com.yeoljeong.tripmate.product.domain.exception.ProductErrorCode;
 import com.yeoljeong.tripmate.product.domain.model.Product;
 import com.yeoljeong.tripmate.product.domain.model.ProductSchedule;
