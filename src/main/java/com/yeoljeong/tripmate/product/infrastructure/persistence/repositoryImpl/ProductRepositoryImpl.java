@@ -1,5 +1,6 @@
 package com.yeoljeong.tripmate.product.infrastructure.persistence.repositoryImpl;
 
+import com.yeoljeong.tripmate.product.domain.enums.ProductStatus;
 import com.yeoljeong.tripmate.product.domain.model.Product;
 import com.yeoljeong.tripmate.product.domain.repository.ProductRepository;
 import com.yeoljeong.tripmate.product.infrastructure.persistence.jpa.ProductJpaRepository;
@@ -39,5 +40,11 @@ public class ProductRepositoryImpl implements ProductRepository {
   @Override
   public List<Product> findAllById(List<UUID> ids) {
     return productJpaRepository.findAllById(ids);
+  }
+
+  // 회원 탈퇴 가능 여부 확인
+  @Override
+  public boolean existsByCreatedByAndStatus(UUID createdBy, ProductStatus status) {
+    return productJpaRepository.existsByCreatedByAndStatus(createdBy, status);
   }
 }
