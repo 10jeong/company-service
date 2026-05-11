@@ -8,7 +8,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'sunsik17/tripmate-company'
         DOCKER_TAG = 'latest'
-        USER_EC2_IP = '172.31.35.186'
+        COMPANY_EC2_IP = '172.31.38.52'
         PEM_PATH = '/var/lib/jenkins/tripmate.pem'
     }
 
@@ -51,7 +51,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh """
-                    ssh -i ${PEM_PATH} -o StrictHostKeyChecking=no ec2-user@${USER_EC2_IP} '
+                    ssh -i ${PEM_PATH} -o StrictHostKeyChecking=no ec2-user@${COMPANY_EC2_IP} '
                         docker pull ${DOCKER_IMAGE}:${DOCKER_TAG}
                         docker stop company-service || true
                         docker rm company-service || true
@@ -60,10 +60,6 @@ pipeline {
                             --env-file /home/ec2-user/.env \\
                             -p 8080:8080 \\
                             ${DOCKER_IMAGE}:${DOCKER_TAG}
-                    '
-                """
-            }
-        }
                     '
                 """
             }

@@ -4,7 +4,10 @@ spring:
     url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
-
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
   jpa:
     hibernate:
       ddl-auto: update
@@ -20,17 +23,18 @@ spring:
           batch_size: 30
           order_inserts: true
           order_updates: true
+  sql:
+    init:
+      mode: never
 
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAPS}
-
     consumer:
-      group-id: company-service
-      auto-offset-reset: earliest
+      group-id: company-group
+      auto-offset-reset: latest
       enable-auto-commit: false
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
@@ -38,22 +42,15 @@ spring:
         acks: all
         retries: 3
         max.in.flight.requests.per.connection: 1
-
     listener:
       ack-mode: manual
       missing-topics-fatal: false
-
   retry:
     interval: 1000
     max-attempts: 3
 
-  properties:
-    hibernate:
-      format_sql: true
-      default_schema: user
-
 server:
-  port: 8081
+  port: ${SERVER_PORT:8080}
 
 eureka:
   client:
@@ -64,3 +61,6 @@ eureka:
     hostname: ${EUREKA_INSTANCE_HOST_NAME}
     non-secure-port: 80
     prefer-ip-address: false
+
+jwt:
+  secret: ${JWT_INTERNAL_SECRET}
