@@ -2,6 +2,7 @@ package com.yeoljeong.tripmate.product.application.service.query;
 
 import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.product.application.dto.result.ProductResult;
+import com.yeoljeong.tripmate.product.domain.enums.ProductStatus;
 import com.yeoljeong.tripmate.product.domain.model.Product;
 import com.yeoljeong.tripmate.product.domain.exception.ProductErrorCode;
 import com.yeoljeong.tripmate.product.domain.repository.ProductRepository;
@@ -30,4 +31,10 @@ public class ProductQueryService {
     return productRepository.findAll(pageable)
         .map(ProductResult::from);
   }
+
+  // 회원 탈퇴 가능 여부 확인 (판매 중인 상품 존재 여부)
+  public boolean hasActiveProduct(UUID userId) {
+    return productRepository.existsByCreatedByAndStatus(userId, ProductStatus.ACTIVE);
+  }
+
 }

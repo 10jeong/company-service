@@ -1,5 +1,6 @@
 package com.yeoljeong.tripmate.product.domain.repository;
 
+import com.yeoljeong.tripmate.product.domain.enums.ProductStatus;
 import com.yeoljeong.tripmate.product.domain.model.Product;
 import java.util.List;
 import java.util.Optional;
@@ -20,4 +21,7 @@ public interface ProductRepository {
 
   // 상품 목록 조회 (in절, N+1 방지용)
   List<Product> findAllById(List<UUID> ids);
+
+  // 회원 탈퇴 가능 여부 확인 (판매 중인 상품 존재 여부)
+  boolean existsByCreatedByAndStatus(UUID createdBy, ProductStatus status);
 }
