@@ -67,6 +67,11 @@ pipeline {
     }
 
     post {
+        always {
+            cleanWs()
+            sh 'docker system prune -f'
+
+        }
         success {
             echo 'Deploy succeeded'
         }
@@ -74,4 +79,4 @@ pipeline {
             echo 'Deploy failed'
         }
     }
-}
+  }
