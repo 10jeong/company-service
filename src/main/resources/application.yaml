@@ -1,0 +1,69 @@
+spring:
+  profiles:
+    active: dev
+
+  application:
+    name: company-service
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAPS:43.200.28.227:29092}
+
+    consumer:
+      group-id: company-service
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      properties:
+        acks: all
+        retries: 3
+        max.in.flight.requests.per.connection: 1
+    listener:
+      ack-mode: manual
+      missing-topics-fatal: false
+
+  retry:
+    interval: 1000
+    max-attempts: 3
+
+  datasource:
+    url: jdbc:postgresql://localhost:${DB_PORT:5432}/${DB_NAME:tripmate_postgres}
+    username: ${DB_USER:tripmate}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+jwt:
+  internal-secret: ${JWT_INTERNAL_SECRET}
+
+server:
+  #port: 0
+  port: 8081
+
+##로컬용
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka}
+#
+#  instance:
+#    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
+#
+
+###ngrok 테스트용
+eureka:
+  client:
+     service-url:
+       defaultZone: ${defaultZone:https://dolphin-device-evident.ngrok-free.dev/eureka/}
+     register-with-eureka: true
+     fetch-registry: true
+
+  instance:
+    hostname: resupply-botch-styling.ngrok-free.dev
+    non-secure-port: 80
+    secure-port: 443
+    secure-port-enabled: true
+    non-secure-port-enabled: false
+    prefer-ip-address: false

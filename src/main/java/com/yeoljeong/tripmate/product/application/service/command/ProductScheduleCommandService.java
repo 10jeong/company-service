@@ -1,0 +1,184 @@
+package com.yeoljeong.tripmate.product.application.service.command;
+
+
+
+import com.yeoljeong.tripmate.exception.BusinessException;
+import com.yeoljeong.tripmate.product.application.dto.command.CreateProductScheduleCommand;
+import com.yeoljeong.tripmate.product.application.dto.result.ProductScheduleCommandResult;
+import com.yeoljeong.tripmate.product.application.port.ProductStockEventPort;
+import com.yeoljeong.tripmate.product.application.client.CompanyClient;
+import com.yeoljeong.tripmate.product.domain.exception.ProductErrorCode;
+import com.yeoljeong.tripmate.product.domain.model.Product;
+import com.yeoljeong.tripmate.product.domain.model.ProductSchedule;
+import com.yeoljeong.tripmate.product.domain.repository.ProductRepository;
+import com.yeoljeong.tripmate.product.domain.repository.ProductScheduleRepository;
+import com.yeoljeong.tripmate.product.infrastructure.external.dto.CompanyClientResponse;
+import jakarta.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class ProductScheduleCommandService {
+
+  private final ProductRepository productRepository;
+  private final ProductScheduleRepository scheduleRepository;
+  private final CompanyClient companyClient;
+  private final ProductStockEventPort stockEventPort;
+  //상품 스케줄 일괄 생성
+
+  /**
+   * 상품 스케줄 일괄 생성
+   * - 상품 존재 여부 확인
+   * - 상품의 업체 조회(FeignClient 내부 통신)
+   * - 업체 검증 - 날짜 유효성 검증
+   * - 날짜 범위 기반 스케줄 생성
+   * - 일괄 저장 (중복은 DB UNIQUE 로 처리)
+   */
+  @Transactional
+  public ProductScheduleCommandResult createSchedules(
+      CreateProductScheduleCommand command,
+      UUID createdBy
+  ) {
+
+    validateDate(command);
+
+    Product product = findProduct(command.getProductId());
+
+    CompanyClientResponse company =
+        companyClient.getCompany(product.getCompanyId());
+
+    validateCompany(company.createdBy(), company.active(), createdBy);
+
+    List<ProductSchedule> schedules =
+        createSchedulesByDateRange(product.getId(), command);
+
+    saveSchedules(schedules);
+
+    // 생성 결과 반환
+    return new ProductScheduleCommandResult(
+        product.getId(),
+        schedules.size(),
+        command.getStartDate(),
+        command.getEndDate()
+    );
+  }
+
+  //재고 차감
+  @Transactional
+  public void deductStock(UUID productId, UUID scheduleId, UUID planUnitId, UUID userId, UUID orderId, int quantity)  {
+    ProductSchedule schedule = scheduleRepository
+        .findByIdAndProductId(scheduleId, productId)
+        .orElseThrow(() -> new BusinessException(ProductErrorCode.SCHEDULE_NOT_FOUND));
+
+    try {
+      schedule.decreaseStock(quantity);
+    } catch (BusinessException e) {
+      // 재고 차감 실패 시 보상 이벤트 발행
+      // REQUIRES_NEW로 별도 트랜잭션으로 저장
+      stockEventPort.save(planUnitId, userId, orderId, quantity);
+      //트랜잭션 롤백
+      throw e;
+    }
+  }
+
+  // 재고 추가
+  @Transactional
+  public void increaseStock(UUID productId, UUID scheduleId, int quantity) {
+    ProductSchedule schedule = scheduleRepository
+        .findByIdAndProductId(scheduleId, productId)
+        .orElseThrow(() -> new BusinessException(ProductErrorCode.SCHEDULE_NOT_FOUND));
+
+    schedule.increaseStock(quantity);
+  }
+
+
+  /** 메서드 **/
+  //상품 존재 여부 확인
+  private Product findProduct(UUID productId) {
+    return productRepository.findById(productId)
+        .orElseThrow(() -> new BusinessException(ProductErrorCode.PRODUCT_NOT_FOUND));
+  }
+
+  // 업체 검증
+  private void validateCompany(
+      UUID companyCreatedBy,
+      boolean isActive,
+      UUID createdBy
+  ) {
+
+    // 현재 로그인한 사용자가 업체 생성자인지 검증
+    if (!Objects.equals(companyCreatedBy, createdBy)) {
+      throw new BusinessException(ProductErrorCode.UNAUTHORIZED_COMPANY_ACCESS);
+    }
+
+    // 업체 활성 상태 검증
+    if (!isActive) {
+      throw new BusinessException(ProductErrorCode.INVALID_COMPANY_STATUS);
+    }
+  }
+
+  // 날짜 유효성 검증
+  private void validateDate(CreateProductScheduleCommand command) {
+
+    LocalDate startDate = command.getStartDate();
+    LocalDate endDate = command.getEndDate();
+
+    // null 체크
+    if (startDate == null || endDate == null) {
+      throw new BusinessException(ProductErrorCode.INVALID_DATE);
+    }
+
+    // 시작일이 종료일보다 늦을 수 없음
+    if (startDate.isAfter(endDate)) {
+      throw new BusinessException(ProductErrorCode.INVALID_DATE);
+    }
+
+    // inclusive 기준 최대 31일 제한
+    long daysInclusive = ChronoUnit.DAYS.between(startDate, endDate) + 1;
+
+    if (daysInclusive > 31) {
+      throw new BusinessException(ProductErrorCode.INVALID_DATE_RANGE);
+    }
+  }
+
+  // 날짜 범위 기반 스케줄 생성 (startDate ~ endDate까지 하루 단위로 생성)
+  private List<ProductSchedule> createSchedulesByDateRange(
+      UUID productId,
+      CreateProductScheduleCommand command
+  ) {
+
+    List<ProductSchedule> schedules = new ArrayList<>();
+
+    // 순회 시작점 = startDate
+    LocalDate current = command.getStartDate();
+
+    // startDate부터 endDate까지 하루씩 증가하며 스케줄 생성
+    while (!current.isAfter(command.getEndDate())) {
+      schedules.add(ProductSchedule.create(productId, current, command.getStock()));
+      current = current.plusDays(1); // 다음 날짜로 이동
+    }
+
+    return schedules;
+  }
+
+  // 스케줄 일괄 저장
+  private void saveSchedules(List<ProductSchedule> schedules) {
+    try {
+      scheduleRepository.saveAll(schedules);
+      scheduleRepository.flush(); //flush 해야 예외를 여기서 잡을 수 있음
+    } catch (DataIntegrityViolationException e) {
+      //(product_id + date) UNIQUE 제약 위반 시 예외 변환
+      throw new BusinessException(ProductErrorCode.SCHEDULE_ALREADY_EXISTS);
+    }
+  }
+}

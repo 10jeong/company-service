@@ -1,0 +1,59 @@
+package com.yeoljeong.tripmate.product.infrastructure.persistence.jpa;
+
+import com.yeoljeong.tripmate.product.domain.model.ProductSchedule;
+import jakarta.persistence.LockModeType;
+import java.time.LocalDate;
+import java.util.Optional;
+import java.util.UUID;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+public interface ProductScheduleJpaRepository
+    extends JpaRepository<ProductSchedule, UUID> {
+
+  // 특정 상품의 스케줄 목록 조회
+  Slice<ProductSchedule> findAllByProductId(
+      UUID productId,
+      Pageable pageable
+  );
+
+  // 조회 전용 스케줄 단건 조회 (scheduleId 기준)
+  // - (내부 통신) 일정에 주는 일정 상품 정보 조회용
+  Optional<ProductSchedule> findReadOnlyById(UUID id);
+
+
+  // 조회 전용 스케줄 단건 조회 (productId + scheduleId)
+  // - 스케줄 단건 조회
+  // - (내부 통신) 주문에 주는 상품 정보 조회
+  Optional<ProductSchedule> findReadOnlyByIdAndProductId(
+      UUID id,
+      UUID productId
+  );
+
+  // 재고 차감
+  // - 비관적 락 사용
+  @Lock(LockModeType.PESSIMISTIC_WRITE)
+  Optional<ProductSchedule> findByIdAndProductId(
+      UUID id,
+      UUID productId
+  );
+
+   // 특정 날짜 예약 가능한 스케줄 조회
+   // - status = ACTIVE
+   // - stock > 0 인 경우만 조회
+  @Query("""
+      SELECT s
+      FROM ProductSchedule s
+      WHERE s.date = :date
+      AND s.status = com.yeoljeong.tripmate.product.domain.enums.ScheduleStatus.ACTIVE
+      AND s.stock > 0
+      """)
+  Slice<ProductSchedule> findAvailableSchedulesByDate(
+      @Param("date") LocalDate date,
+      Pageable pageable
+  );
+}
