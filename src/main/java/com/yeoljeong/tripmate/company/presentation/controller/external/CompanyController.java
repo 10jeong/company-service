@@ -10,6 +10,9 @@ import com.yeoljeong.tripmate.response.ApiResponse;
 import com.yeoljeong.tripmate.response.constants.CommonSuccessCode;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -32,6 +35,15 @@ public class CompanyController {
     CompanyResponse response = CompanyResponse.from(result);
 
     return ApiResponse.success(CommonSuccessCode.CREATE, response);
+  }
+
+  //목록 조회
+  @GetMapping
+  public ApiResponse<Slice<CompanyResponse>> getCompanies(
+      @PageableDefault(size = 10) Pageable pageable
+  ) {
+    return ApiResponse.success(CommonSuccessCode.OK,
+        queryService.getCompanies(pageable).map(CompanyResponse::from));
   }
 
   // 단건 조회
