@@ -4,6 +4,8 @@ import com.yeoljeong.tripmate.company.domain.model.Company;
 import com.yeoljeong.tripmate.company.domain.repository.CompanyRepository;
 import com.yeoljeong.tripmate.company.infrastructure.persistence.jpa.CompanyJpaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -20,6 +22,12 @@ public class CompanyRepositoryImpl implements CompanyRepository {
   @Override
   public Company save(Company company) {
     return jpaRepository.save(company);
+  }
+
+  //업체 목록 조회
+  @Override
+  public Slice<Company> findAll(Pageable pageable) {
+    return jpaRepository.findAll(pageable);
   }
 
   // 업체 단건 조회

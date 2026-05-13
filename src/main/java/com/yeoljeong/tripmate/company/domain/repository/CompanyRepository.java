@@ -4,11 +4,16 @@ import com.yeoljeong.tripmate.company.domain.model.Company;
 
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 public interface CompanyRepository {
 
   // 업체 저장
   Company save(Company company);
+
+  //업체 목록 조회
+  Slice<Company> findAll(Pageable pageable);
 
   // 업체 단건 조회
   Optional<Company> findById(UUID id);
