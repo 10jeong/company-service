@@ -75,4 +75,11 @@ public class ProductScheduleRepositoryImpl implements ProductScheduleRepository 
   ) {
     return jpaRepository.findAvailableSchedulesByDate(date, pageable);
   }
+
+  // 스케줄 ID 리스트로 다건 조회
+  // - 내부 통신용 일정에 넘겨주는 상품 스케줄 정보 다건 조회
+  @Override
+  public List<ProductSchedule> findAllById(List<UUID> scheduleIds) {
+    return jpaRepository.findAllById(scheduleIds);
+  }
 }
