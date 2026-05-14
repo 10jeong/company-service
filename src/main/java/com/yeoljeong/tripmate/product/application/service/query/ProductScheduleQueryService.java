@@ -90,7 +90,7 @@ public class ProductScheduleQueryService {
 
   public List<ProductScheduleInfoResult> getSchedules(List<UUID> scheduleIds) {
     List<ProductSchedule> schedules = scheduleRepository.findAllById(scheduleIds);
-    Map<UUID, Product> productMap = getProductMap(schedules); // 이미 있는 메서드 재활용!
+    Map<UUID, Product> productMap = getProductMap(schedules);
 
     return schedules.stream()
         .map(schedule -> ProductScheduleInfoResult.from(
