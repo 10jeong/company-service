@@ -75,12 +75,18 @@ jwt:
   secret: ${JWT_INTERNAL_SECRET}
 
 management:
-              endpoints:
-                web:
-                  exposure:
-                    include: health, info, prometheus
-              endpoint:
-                health:
-                  show-details: always
-                prometheus:
-                  access: unrestricted
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus
+  endpoint:
+    health:
+      show-details: always
+    prometheus:
+      access: unrestricted
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_SERVER_URL}
