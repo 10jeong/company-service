@@ -44,4 +44,8 @@ public interface ProductScheduleRepository {
       Pageable pageable
   );
 
+  // 스케줄 ID 리스트로 다건 조회
+  // - 내부 통신용 일정에 넘겨주는 상품 스케줄 정보 조회
+  List<ProductSchedule> findAllById(List<UUID> scheduleIds);
+
 }

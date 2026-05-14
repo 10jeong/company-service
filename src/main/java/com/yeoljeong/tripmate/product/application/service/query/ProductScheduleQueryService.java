@@ -88,6 +88,17 @@ public class ProductScheduleQueryService {
         .orElseThrow(() -> new BusinessException(ProductErrorCode.PRODUCT_NOT_FOUND));
   }
 
+  public List<ProductScheduleInfoResult> getSchedules(List<UUID> scheduleIds) {
+    List<ProductSchedule> schedules = scheduleRepository.findAllById(scheduleIds);
+    Map<UUID, Product> productMap = getProductMap(schedules);
+
+    return schedules.stream()
+        .map(schedule -> ProductScheduleInfoResult.from(
+            productMap.get(schedule.getProductId()), schedule))
+        .toList();
+  }
+
+
   /**메서드**/
 // 스케줄 목록에서 productId 추출 후 상품 한번에 조회
 // - 스케줄마다 개별 조회(N+1) 대신 in절로 한번에 조회
