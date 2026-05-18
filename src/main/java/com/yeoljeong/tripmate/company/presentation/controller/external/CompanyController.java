@@ -2,6 +2,7 @@ package com.yeoljeong.tripmate.company.presentation.controller.external;
 
 import com.yeoljeong.tripmate.auth.annotation.LoginUser;
 import com.yeoljeong.tripmate.auth.annotation.RequireRole;
+import com.yeoljeong.tripmate.auth.context.UserContext;
 import com.yeoljeong.tripmate.company.application.dto.result.CompanyResult;
 import com.yeoljeong.tripmate.company.application.service.command.CompanyCommandService;
 import com.yeoljeong.tripmate.company.application.service.query.CompanyQueryService;
@@ -60,10 +61,10 @@ public class CompanyController {
   @RequireRole("SELLER")
   @GetMapping("/me")
   public ApiResponse<Slice<CompanyResponse>> getMyCompanies(
-      @LoginUser UUID userId,
+      @LoginUser UserContext user,
       @PageableDefault(size = 10) Pageable pageable
   ) {
     return ApiResponse.success(CommonSuccessCode.OK,
-        queryService.getMyCompanies(userId, pageable).map(CompanyResponse::from));
+        queryService.getMyCompanies(user.userId(), pageable).map(CompanyResponse::from));
   }
 }
