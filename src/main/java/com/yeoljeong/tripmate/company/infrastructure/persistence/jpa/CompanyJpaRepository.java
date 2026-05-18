@@ -6,11 +6,14 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface CompanyJpaRepository extends JpaRepository<Company, UUID> {
 
   //사업자 번호 중복 여부 확인
   boolean existsByBusinessNumber(String businessNumber);
 
-  Slice<Company> findAllByCreatedBy(UUID createdBy, Pageable pageable);
+  @Query("SELECT c FROM Company c WHERE c.createdBy = :createdBy")
+  Slice<Company> findAllByCreatedBy(@Param("createdBy") UUID createdBy, Pageable pageable);
 }
