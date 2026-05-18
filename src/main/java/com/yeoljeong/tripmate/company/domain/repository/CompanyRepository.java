@@ -18,6 +18,9 @@ public interface CompanyRepository {
   // 업체 단건 조회
   Optional<Company> findById(UUID id);
 
+  //내 업체 조회
+  Slice<Company> findAllByCreatedBy(UUID createdBy, Pageable pageable);
+
   // 사업자 번호 중복 여부 확인
   // - 업체 생성 시 중복 검증 용도
   boolean existsByBusinessNumber(String businessNumber);

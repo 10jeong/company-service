@@ -33,6 +33,12 @@ public class CompanyQueryService {
         .map(CompanyResult::from);
   }
 
+  // 내 업체 목록 조회
+  public Slice<CompanyResult> getMyCompanies(UUID userId, Pageable pageable) {
+    return companyRepository.findAllByCreatedBy(userId, pageable)
+        .map(CompanyResult::from);
+  }
+
   //==메서드==
 
   // 업체 단건 조회 - ID로 조회, 없으면 예외 발생
