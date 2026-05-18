@@ -36,6 +36,12 @@ public class CompanyRepositoryImpl implements CompanyRepository {
     return jpaRepository.findById(id);
   }
 
+  // 내 업체 목록 조회
+  @Override
+  public Slice<Company> findAllByCreatedBy(UUID createdBy, Pageable pageable) {
+    return jpaRepository.findAllByCreatedBy(createdBy, pageable);
+  }
+
   // 사업자 번호 중복 여부 확인
   // - 업체 생성 시 중복 검증 용도
   @Override
