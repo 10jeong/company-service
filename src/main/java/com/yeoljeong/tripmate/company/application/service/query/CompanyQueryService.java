@@ -7,6 +7,7 @@ import com.yeoljeong.tripmate.company.domain.repository.CompanyRepository;
 
 import com.yeoljeong.tripmate.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -35,8 +37,11 @@ public class CompanyQueryService {
 
   // 내 업체 목록 조회
   public Slice<CompanyResult> getMyCompanies(UUID userId, Pageable pageable) {
-    return companyRepository.findAllByCreatedBy(userId, pageable)
+    log.info("=== getMyCompanies userId: {}", userId);
+    Slice<CompanyResult> result = companyRepository.findAllByCreatedBy(userId, pageable)
         .map(CompanyResult::from);
+    log.info("=== 결과 개수: {}", result.getNumberOfElements());
+    return result;
   }
 
   //==메서드==
