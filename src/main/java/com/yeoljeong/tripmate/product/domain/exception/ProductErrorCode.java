@@ -22,6 +22,7 @@ public enum ProductErrorCode implements ErrorCode {
   INVALID_DATE(HttpStatus.BAD_REQUEST, "날짜는 필수입니다."),
   INVALID_DATE_RANGE(HttpStatus.BAD_REQUEST, "스케줄 생성 가능한 날짜 범위는 최대 31일입니다."),
   SCHEDULE_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 해당 날짜의 스케줄이 존재합니다."),
+  INVALID_SCHEDULE_DATE(HttpStatus.BAD_REQUEST, "과거 날짜는 조회할 수 없습니다."),
 
   // 스케줄 - 재고
   INVALID_STOCK(HttpStatus.BAD_REQUEST, "재고는 1 이상이어야 합니다."),
