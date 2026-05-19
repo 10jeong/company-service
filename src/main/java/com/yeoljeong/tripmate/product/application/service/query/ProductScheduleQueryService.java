@@ -48,6 +48,11 @@ public class ProductScheduleQueryService {
       LocalDate date,
       Pageable pageable
   ) {
+    // 과거 날짜 검증 추가
+    if (date.isBefore(LocalDate.now())) {
+      throw new BusinessException(ProductErrorCode.INVALID_SCHEDULE_DATE);
+    }
+
     // 1. 날짜 기준 예약 가능한 스케줄 목록 조회
     Slice<ProductSchedule> schedules =
         scheduleRepository.findAvailableSchedulesByDate(date, pageable);
