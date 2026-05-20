@@ -42,19 +42,18 @@ public record ProductRequest(
     @Positive(message = "가격은 0보다 커야 합니다.")
     BigDecimal price
 
-
 ) {
 
-  public CreateProductCommand toCommand(UUID companyId) {
-    return CreateProductCommand.builder()
-        .companyId(companyId)
-        .productName(productName)
-        .description(description)
-        .country(Country.valueOf(country))
-        .state(state)
-        .city(city)
-        .addressLine(addressLine)
-        .price(price)
-        .build();
-  }
+    public CreateProductCommand toCommand(UUID companyId) {
+        return CreateProductCommand.builder()
+            .companyId(companyId)
+            .productName(productName)
+            .description(description)
+            .country(Country.valueOf(country))
+            .state(state)
+            .city(city)
+            .addressLine(addressLine)
+            .price(price)
+            .build();
+    }
 }

@@ -18,7 +18,8 @@ public record ProductResult(
     String description,
     ProductAddress address,
     BigDecimal price,
-    String status
+    String status,
+    String imageUrl
 ) {
 
   public static ProductResult from(Product product) {
@@ -29,7 +30,8 @@ public record ProductResult(
         product.getDescription(),
         product.getAddress(),
         product.getPrice(),
-        product.getStatus().name()
+        product.getStatus().name(),
+        product.getImageUrl()
     );
   }
 }
