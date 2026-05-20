@@ -11,6 +11,8 @@ public enum ProductErrorCode implements ErrorCode {
   INVALID_PRODUCT_PRICE(HttpStatus.BAD_REQUEST, "상품 가격이 올바르지 않습니다."),
   INVALID_PRODUCT_ADDRESS(HttpStatus.BAD_REQUEST, "상품 주소가 올바르지 않습니다."),
   INVALID_PRODUCT_IMAGE_URL(HttpStatus.BAD_REQUEST, "상품 이미지 URL은 필수입니다."),
+  IMAGE_EMPTY_ERROR(HttpStatus.BAD_REQUEST, "이미지가 비어있습니다."),
+  IMAGE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 업로드 중 오류가 발생하였습니다."),
 
   // 업체
   COMPANY_NOT_FOUND(HttpStatus.NOT_FOUND, "업체를 찾을 수 없습니다."),

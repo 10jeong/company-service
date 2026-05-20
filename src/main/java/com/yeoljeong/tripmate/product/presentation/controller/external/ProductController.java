@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,20 +33,19 @@ public class ProductController {
   @PostMapping
   public ApiResponse<ProductResponse> createProduct(
       @ModelAttribute @Valid ProductRequest request,
+      @RequestPart("image") MultipartFile image,
       @RequestHeader("X-Company-Id") UUID companyId,
       @LoginUser UserContext user
   ) {
     CreateProductCommand command = request.toCommand(companyId);
 
-
-    ProductResult result =
-        productCommandService.createProduct(
-            command,
-            user.userId()
-        );
+    ProductResult result = productCommandService.createProduct(
+        command,
+        user.userId(),
+        image
+    );
 
     ProductResponse response = ProductResponse.from(result);
-
     return ApiResponse.success(CommonSuccessCode.CREATE, response);
   }
 
