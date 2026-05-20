@@ -31,7 +31,7 @@ public class ProductController {
   @RequireRole("SELLER")
   @PostMapping
   public ApiResponse<ProductResponse> createProduct(
-      @RequestBody @Valid ProductRequest request,
+      @ModelAttribute @Valid ProductRequest request,
       @RequestHeader("X-Company-Id") UUID companyId,
       @LoginUser UserContext user
   ) {

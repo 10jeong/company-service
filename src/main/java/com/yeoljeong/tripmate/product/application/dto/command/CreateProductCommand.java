@@ -29,6 +29,7 @@ public class CreateProductCommand {
   private String city;
   private String addressLine;
   private BigDecimal price;
+  private String imageUrl;
 
   public Product toEntity() {
     return Product.create(
@@ -36,7 +37,8 @@ public class CreateProductCommand {
         productName,
         description,
         toAddress(),
-        price
+        price,
+        imageUrl
     );
   }
 

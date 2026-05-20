@@ -40,7 +40,10 @@ public record ProductRequest(
     @NotNull(message = "가격은 필수입니다.")
     @Digits(integer = 8, fraction = 2, message = "가격은 정수 8자리, 소수 2자리 이내여야 합니다.")
     @Positive(message = "가격은 0보다 커야 합니다.")
-    BigDecimal price
+    BigDecimal price,
+
+    @NotBlank(message = "이미지 URL은 필수입니다.")
+        String imageUrl
 
 
 ) {
@@ -55,6 +58,7 @@ public record ProductRequest(
         .city(city)
         .addressLine(addressLine)
         .price(price)
+        .imageUrl(imageUrl)
         .build();
   }
 }
