@@ -30,13 +30,14 @@ public class CreateProductCommand {
   private String addressLine;
   private BigDecimal price;
 
-  public Product toEntity() {
+  public Product toEntity(String imageUrl) {
     return Product.create(
         companyId,
         productName,
         description,
         toAddress(),
-        price
+        price,
+        imageUrl
     );
   }
 

@@ -45,6 +45,9 @@ public class Product extends BaseAuditEntity {
   @Column(nullable = false, precision = 10, scale = 2)
   private BigDecimal price;
 
+  @Column
+  private String imageUrl;
+
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private ProductStatus status;
@@ -55,13 +58,15 @@ public class Product extends BaseAuditEntity {
       String productName,
       String description,
       ProductAddress address,
-      BigDecimal price
+      BigDecimal price,
+      String imageUrl
   ) {
     this.companyId = companyId;
     this.productName = productName;
     this.description = description;
     this.address = validateAddress(address);
     this.price = validatePrice(price);
+    this.imageUrl = validateImageUrl(imageUrl);
     this.status = ProductStatus.ACTIVE;
   }
 
@@ -70,7 +75,8 @@ public class Product extends BaseAuditEntity {
       String productName,
       String description,
       ProductAddress address,
-      BigDecimal price
+      BigDecimal price,
+      String imageUrl
   ) {
     return Product.builder()
         .companyId(companyId)
@@ -78,10 +84,11 @@ public class Product extends BaseAuditEntity {
         .description(description)
         .address(address)
         .price(price)
+        .imageUrl(imageUrl)
         .build();
   }
 
-  //주소 검증 메서드
+  // 주소 검증 메서드
   private static ProductAddress validateAddress(ProductAddress address) {
     if (address == null) {
       throw new BusinessException(ProductErrorCode.INVALID_PRODUCT_ADDRESS);
@@ -96,8 +103,12 @@ public class Product extends BaseAuditEntity {
     }
     return price;
   }
+
+  // 이미지 URL 검증 메서드 추가
+  private static String validateImageUrl(String imageUrl) {
+    if (imageUrl == null || imageUrl.isBlank()) {
+      throw new BusinessException(ProductErrorCode.INVALID_PRODUCT_IMAGE_URL);
+    }
+    return imageUrl;
+  }
 }
-
-
-
-

@@ -16,7 +16,8 @@ public record ProductResponse(
     String description,
     ProductAddress address,
     BigDecimal price,
-    String status
+    String status,
+    String imageUrl
 
 ) {
 
@@ -28,7 +29,8 @@ public record ProductResponse(
         result.description(),
         result.address(),
         result.price(),
-        result.status()
+        result.status(),
+        result.imageUrl()
     );
   }
 }

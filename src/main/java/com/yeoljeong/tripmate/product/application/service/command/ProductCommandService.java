@@ -4,6 +4,7 @@ import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.product.application.dto.command.CreateProductCommand;
 import com.yeoljeong.tripmate.product.application.dto.result.ProductResult;
 import com.yeoljeong.tripmate.product.application.client.CompanyClient;
+import com.yeoljeong.tripmate.product.application.port.StorageReader;
 import com.yeoljeong.tripmate.product.domain.exception.ProductErrorCode;
 import com.yeoljeong.tripmate.product.domain.model.Product;
 import com.yeoljeong.tripmate.product.domain.repository.ProductRepository;
@@ -12,6 +13,7 @@ import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +21,7 @@ public class ProductCommandService {
 
   private final ProductRepository productRepository;
   private final CompanyClient companyClient;
+  private final StorageReader storageReader;
 
   //상품 생성
   /**
@@ -28,19 +31,27 @@ public class ProductCommandService {
    */
   public ProductResult createProduct(
       CreateProductCommand command,
-      UUID createdBy
+      UUID createdBy,
+      MultipartFile image
   ) {
     CompanyClientResponse company =
         companyClient.getCompany(command.getCompanyId());
 
     validateCompany(company.createdBy(), company.active(), createdBy);
 
-    Product product = command.toEntity();
+    String imageUrl = uploadImage(image);
+
+    Product product = command.toEntity(imageUrl);
     Product saved = productRepository.save(product);
     return ProductResult.from(saved);
   }
 
   /** 메서드 **/
+  private String uploadImage(MultipartFile image) {
+    String fileName = UUID.randomUUID() + ".jpg";
+    return storageReader.upload(image, fileName);
+  }
+
   //업체 검증 메서드
   private void validateCompany(
       UUID companyCreatedBy,
